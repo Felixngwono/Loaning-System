@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="mb-4 text-center text-primary">Loan Decision Cart</h2>
+
+  {% if cart_items %}
+  <form method="post" action="{% url 'decide_bulk_loan' %}">
+    {% csrf_token %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Borrower</th>
+            <th>Amount</th>
+            <th>Purpose</th>
+            <th class="text-center">Decision</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart_items %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.application.borrower.user.get_full_name }}</td>
+            <td>KES {{ item.application.amount_requested }}</td>
+            <td>{{ item.application.purpose }}</td>
+            <td class="text-center">
+              <select name="decision_{{ item.application.id }}" class="form-select form-select-sm">
+                <option value="">-- Select --</option>
+                <option value="APPROVED">Approve</option>
+                <option value="REJECTED">Reject</option>
+              </select>
+            </td>
+            <td>
+              <textarea name="notes_{{ item.application.id }}" class="form-control form-control-sm" rows="1" placeholder="Optional notes..."></textarea>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-success me-3">Submit All Decisions</button>
+      <a href="{% url 'application_list' %}" class="btn btn-outline-primary">Back to Applications</a>
+    </div>
+  </form>
+
+  {% else %}
+  <div class="alert alert-info text-center">
+    No applications in your review cart.
+  </div>
+  {% endif %}
+</div>
+
+{% include "footer.html" %}
+{% endblock %}

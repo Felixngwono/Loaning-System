@@ -1,0 +1,33 @@
+/* register.css */
+
+body {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #dbeafe 0%, #f3e8ff 50%, #cffbd6 100%);
+  min-height: 100vh;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #6366f1;
+}
+
+form label {
+  letter-spacing: 0.01em;
+}
+
+button[type="submit"] {
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+button[type="submit"]:hover {
+  box-shadow: 0 8px 24px 0 rgba(99,102,241,0.15);
+}
+
+.dark body {
+  background: linear-gradient(135deg, #111827 0%, #1f2937 50%, #111827 100%);
+}
+
+::-webkit-input-placeholder { color: #a1a1aa; }
+::-moz-placeholder { color: #a1a1aa; }
+:-ms-input-placeholder { color: #a1a1aa; }
+::placeholder { color: #a1a1aa; }

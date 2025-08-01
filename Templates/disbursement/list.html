@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="mb-4">Loan Disbursements</h2>
+
+  {% if disbursements %}
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th>Loan ID</th>
+          {% if request.user.is_superuser %}
+          <th>Borrower</th>
+          {% endif %}
+          <th>Amount</th>
+          <th>Method</th>
+          <th>Disbursed At</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for disb in disbursements %}
+        <tr>
+          <td>#{{ disb.loan.id }}</td>
+          {% if request.user.is_superuser %}
+          <td>{{ disb.loan.borrower.username }}</td>
+          {% endif %}
+          <td>KSh {{ disb.amount|floatformat:2 }}</td>
+          <td>{{ disb.get_method_display }}</td>
+          <td>{{ disb.disbursed_at|date:"Y-m-d H:i" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="alert alert-warning">No disbursements available.</p>
+  {% endif %}
+
+</div>
+
+{% include "footer.html" %}
+{% endblock %}

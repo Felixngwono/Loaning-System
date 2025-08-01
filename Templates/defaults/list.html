@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="text-center text-danger mb-4">Loan Defaulters</h2>
+
+  {% if defaults %}
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle">
+      <thead class="table-danger">
+        <tr>
+          <th>#</th>
+          <th>Borrower</th>
+          <th>Loan ID</th>
+          <th>Amount Due (KES)</th>
+          <th>Due Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for default in defaults %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ default.loan.borrower.user.get_full_name }}</td>
+          <td>{{ default.loan.id }}</td>
+          <td>{{ default.amount_due }}</td>
+          <td>{{ default.due_date }}</td>
+          <td>
+            {% if default.status == "Overdue" %}
+              <span class="badge bg-danger">Overdue</span>
+            {% elif default.status == "Pending" %}
+              <span class="badge bg-warning text-dark">Pending</span>
+            {% else %}
+              <span class="badge bg-success">Paid</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-success text-center">
+    No defaulters found.
+  </div>
+  {% endif %}
+
+  <div class="mt-4 text-center">
+    <a href="{% url 'index' %}" class="btn btn-outline-secondary">
+      Back to Dashboard
+    </a>
+  </div>
+</div>
+
+{% include "footer.html" %}
+{% endblock %}

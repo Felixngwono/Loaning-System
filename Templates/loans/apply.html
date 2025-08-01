@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Apply for a Loan</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    {% if form.errors %}
+    <div class="alert alert-danger">
+      <strong>Please correct the following errors:</strong>
+      <ul class="mb-0 ps-3">
+        {% for field in form %}
+          {% for error in field.errors %}
+            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+          {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    {% if messages %}
+    <div class="alert alert-info">
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if request.user.is_superuser %}
+    <div class="mb-3">
+      <label for="borrower" class="form-label">Borrower</label>
+      {% render_field form.borrower class="form-control" id="borrower" %}
+    </div>
+    {% endif %}
+
+    <div class="mb-3">
+      <label for="purpose" class="form-label">Purpose of Loan</label>
+      {% render_field form.purpose class="form-control" id="purpose" %}
+    </div>
+
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      {% render_field form.status class="form-control" id="status" %}
+    </div>
+
+    <div class="mb-3">
+      <label for="amount" class="form-label">Amount</label>
+      {% render_field form.amount class="form-control" id="amount" %}
+    </div>
+
+    <div class="mb-3">
+      <label for="term_months" class="form-label">Term Months</label>
+      {% render_field form.term_months class="form-control" id="term_months" %}
+    </div>
+
+    <div class="mb-3">
+      <label for="interest_rate" class="form-label">Interest Rate</label>
+      {% render_field form.interest_rate class="form-control" id="interest_rate" %}
+    </div>
+
+    <button class="btn btn-primary" type="submit">Submit Application</button>
+  </form>
+</div>
+
+{% include "footer.html" %}
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2 class="text-center mb-4 text-primary">
+    {% if request.user.is_staff or request.user.is_superuser %}
+      All Loan Applications
+    {% else %}
+      Your Loan Records
+    {% endif %}
+  </h2>
+
+  {% if loan_table %}
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            {% if request.user.is_staff or request.user.is_superuser %}
+            <th>Borrower</th>
+            {% endif %}
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Issued On</th>
+            <th>Due Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for loan in loan_table %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            {% if request.user.is_staff or request.user.is_superuser %}
+            <td>{{ loan.borrower.user.get_name }}</td>
+            {% endif %}
+            <td>KES {{ loan.amount }}</td>
+            <td>{{ loan.status }}</td>
+            <td>{{ loan.approval_date|date:"M d, Y" }}</td>
+            <td>{{ loan.due_date|date:"M d, Y" }}</td>
+            <td>
+              <a href="" class="btn btn-sm btn-outline-primary">Repayments</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-warning text-center">
+      {% if request.user.is_staff or request.user.is_superuser %}
+        No loan applications found.
+      {% else %}
+        You have no loan records yet.
+      {% endif %}
+    </div>
+  {% endif %}
+{% include "footer.html" %}
+{% endblock %}

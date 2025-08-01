@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container text-center mt-5">
+  <img src="{% static 'images/403.png' %}" alt="403 Forbidden" class="img-fluid" style="max-height: 300px;">
+  
+  <h1 class="display-4 mt-4">403 Forbidden</h1>
+  <p class="lead">You do not have permission to access this page.</p>
+
+  <a href="{% url 'index' %}" class="btn btn-primary mt-3">Return to Home</a>
+</div>
+{% include "footer.html" %}
+{% endblock %}

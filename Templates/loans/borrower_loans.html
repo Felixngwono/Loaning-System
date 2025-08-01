@@ -1,0 +1,98 @@
+  {% extends "base.html" %}
+  {% block content %}
+  <div class="container-fluid px-4">
+    {% if request.user.is_enduser %}
+                        <h1 class="mt-4">Borrower Loans</h1>
+                        
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Loans</li>   
+                        </ol>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Borrower Loans
+                            </div>
+                            
+                            <div class="card-body">
+                                <table id="datatablesSimple" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Loan ID</th>
+                                            <th>Borrower Name</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Date Applied</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for loan in loans %}
+                                        <tr>
+                                            <td>{{ loan.id }}</td>
+                                            <td>{{ user.name }}</td>
+                                            <td>{{ loan.amount }}</td>
+                                            <td>{{ loan.status }}</td>
+                                            <td>{{ loan.application_date }}</td>
+                                            <td>
+                                                <a href="{% url "borrower_details" loan.pk %}" class="btn btn-primary btn-sm">View</a>
+                                                {% if loan.status == 'Pending' %}
+                                                <a href="{% url 'approve_loan' loan.id %}" class="btn btn-success btn-sm">Approve</a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>  
+                        </div>
+                    </div>
+                    {% elif request.user.is_superuser %}
+                          <h1 class="mt-4">Borrower Loans</h1>
+                        
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Loans</li>   
+                        </ol>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Borrower Loans
+                            </div>
+                            
+                            <div class="card-body">
+                                <table id="datatablesSimple" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Loan ID</th>
+                                            <th>Borrower Name</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Date Applied</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for x in borrower %}
+                                        <tr>
+                                            <td>{{ x.id }}</td>
+                                            <td>{{ x.borrower.user.get_name }}</td>
+                                            <td>{{ x.amount }}</td>
+                                            <td>{{ x.status }}</td>
+                                            <td>{{ x.application_date }}</td>
+                                            <td>
+                                                <a href="" class="btn btn-primary btn-sm">View</a>
+                                                {% if x.status == 'Pending' %}
+                                                <a href="{% url 'approve_x' x.id %}" class="btn btn-success btn-sm">Approve</a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>  
+                        </div>
+                    </div>
+                    {% endif %}
+
+{% include "footer.html" %}
+
+{% endblock  %}
