@@ -323,7 +323,7 @@
                                             <th>Purpose</th>
                                             <th>Amount</th>
                                             <th>Appliacation Date</th>
-                                            <th>Start date</th>
+                                            <th>approval_date</th>
                                             <th>Status</th>
                                             
                                         </tr>
@@ -331,10 +331,10 @@
                                     <tfoot>
                                         <tr>
                                             <th>Borrower</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
+                                            <th>Purpose</th>
+                                            <th>Amount</th>
+                                            <th>Application Date</th>
+                                            <th>Approval date</th>
                                             <th>Status</th>
                                         </tr>
                                     </tfoot>
@@ -344,8 +344,8 @@
                                             <td>{{ x.borrower.name }}</td>
                                             <td>{{ x.purpose }}</td>
                                             <td>ksh.{{ x.amount }}</td>
-                                            <td>{{ x.term_months }}</td>
                                             <td>{{ x.application_date }}</td>
+                                            <td>{{ x.approval_date }}</td>
 
                                             <td>{{x.status}}</td>
 

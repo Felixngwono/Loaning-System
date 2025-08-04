@@ -31,7 +31,7 @@
                         {% for item in cart_items %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ user.name }}</td>
+                            <td>{{item.borrower.name }}</td>
                             <td>KES {{ item.amount|floatformat:2 }}</td>
                             <td>{{ item.purpose }}</td>
                             <td><span class="badge bg-warning text-dark">{{ item.status }}</span></td>

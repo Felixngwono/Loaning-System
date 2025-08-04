@@ -167,16 +167,18 @@ def chart(request):
 
 @login_required(login_url='login')
 def apply_for_loan(request):
+    show_modal = False
     if request.method == 'POST':
         form = LoanApplicationForm(request.POST)
         if form.is_valid():
             loan = form.save(commit=False)
             loan.borrower = request.user
             loan.save()
-            return redirect('loan_success')  # Create a template for this
+            messages.success(request,'Loan Application successful')
+            show_modal=True 
     else:
         form = LoanApplicationForm()
-    return render(request, 'loans/apply.html', {'form': form})
+    return render(request, 'loans/apply.html', {'form': form,'show_modal':show_modal})
 
 def loan_success(request):
     return render(request, 'loans/success.html')
@@ -346,7 +348,11 @@ def loan_conditions(request, loan_id):
 
 @login_required(login_url='login')
 def loan_cart(request):
-    cart_items = Loan.objects.filter(status='PENDING').select_related('borrower')
+    if request.user.is_superuser:
+        cart_items=Loan.objects.all()
+    else:
+        cart_items = Loan.objects.filter(status='PENDING').select_related('borrower')
+
     return render(request, 'admin/loan_cart.html', {'cart_items': cart_items})
 
 
@@ -409,6 +415,7 @@ def disbursement_list(request):
 @login_required(login_url='login')
 def loan_approval_list(request):
     if not request.user.is_superuser:
+        
         return render(request, 'loanapproval/403.html') 
 
     approvals = loanapproval.objects.select_related('loan', 'approved_by').order_by('-approval_date')
