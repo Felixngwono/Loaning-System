@@ -87,6 +87,14 @@ def index(request):
     total_repaid_loans_since_lastweek = Repayment.objects.filter(payment_date__gte=timezone.now().date() - timezone.timedelta(days=7), loan__borrower=request.user).aggregate(Sum('amount'))['amount__sum'] or 0.0
     defaulted_loans = DefaultRecord.objects.filter(loan__borrower=request.user).count()
     defaulters_since_lastmonth = DefaultRecord.objects.filter(marked_date__gte=timezone.now().date() - timezone.timedelta(days=30), loan__borrower=request.user).count()
+    
+    if request.user.is_superuser:
+        borrowerss = Loan.objects.all()
+    else:
+        borrowerss = Loan.objects.filter(borrower=request.user)
+
+
+
     context={'users':users,
              'users_since_lastmonth': users_since_lastmonth,
              'borrowers':borrowers,
@@ -105,6 +113,7 @@ def index(request):
              'total_repaid_loans_since_lastweek': total_repaid_loans_since_lastweek,
              'defaulted_loans': defaulted_loans,
              'defaulters_since_lastmonth': defaulters_since_lastmonth,
+             'borrowerss': borrowerss,
              }
     return render(request, 'index.html',context)
 
@@ -175,9 +184,13 @@ def loan_success(request):
 
 @login_required(login_url='login')
 def borrower_loans(request):
-    borrower=Loan.objects.all()
-    loans = Loan.objects.filter(borrower=request.user)
-    return render(request, 'loans/borrower_loans.html', {'loans': loans,'borrower':borrower})
+    if request.user.is_superuser:
+        borrower = Loan.objects.all()
+    else:
+        # Regular users see only their own loans
+        borrower = Loan.objects.filter(borrower=request.user)
+
+    return render(request, 'loans/borrower_loans.html', {'borrower':borrower})
 
 @login_required(login_url='login')
 def borrower_details(request, pk):
