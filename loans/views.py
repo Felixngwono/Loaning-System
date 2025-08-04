@@ -2,16 +2,20 @@ from datetime import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from loans.forms import  LoanApplicationForm, MyUserCreationForm, RepaymentForm
+from loans.forms import  ContactForm, LoanApplicationForm, MyUserCreationForm, RepaymentForm
 from .models import Borrower, DefaultRecord, Guarantor, LoanApplication, LoanCondition, LoanDocument, LoanOfficer, LoanPurposeCategory, LoanSchedule, Repayment, ReviewCart, SupportTicket, TransactionLog, User, disbursement, loanapproval
 from django.http import HttpResponse
 from .models import Loan
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+from django.utils import timezone
+from django.db.models import Sum
 
 
 # Create your views here.
 def signup(request):
+    show_modal = False  
+    
     form = MyUserCreationForm()
     if request.method == 'POST':
         form = MyUserCreationForm(request.POST, request.FILES)
@@ -19,13 +23,19 @@ def signup(request):
             user = form.save(commit=False)
             user.save()
             messages.info(request, 'Registration successful, login to continue to main page')
+
+            show_modal = True
             return redirect('login')
+        
         else:
             messages.warning(request, 'An error occurred during registration')
+            show_modal = True
 
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'signup.html', {'form': form, 'show_modal': show_modal})
 
 def loginpage(request):
+    show_modal = False 
+
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -34,22 +44,25 @@ def loginpage(request):
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             messages.warning(request, 'User does not exist')
-            return render(request, 'sign-in.html')
+            show_modal = True
+            return render(request, 'sign-in.html', {'show_modal': show_modal})
 
         user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request, user)
-            messages.info(request, 'Login successful')
-            return redirect('index')
+            messages.success(request, 'Login successful')
+            show_modal = True
+            return render(request, 'sign-in.html', {'show_modal': show_modal})
         else:
             messages.warning(request, 'Wrong username or password')
-    return render(request, 'sign-in.html')
+            show_modal = True
+
+    return render(request, 'sign-in.html', {'show_modal': show_modal})
 
 def logoutuser(request):
     if not request.user.is_authenticated:
         return HttpResponse("You are not logged in.", status=401)
-    
     logout(request)
     messages.info(request, "It's sad to see you leave. Welcome again!")
     return redirect('login')
@@ -57,7 +70,42 @@ def logoutuser(request):
 @login_required(login_url='login')
 def index(request):
     users=User.objects.all().count
-    context={'users':users}
+    users_since_lastmonth = User.objects.filter(date_joined__gte=timezone.now().date() - timezone.timedelta(days=30)).count()
+    borrowers=Loan.objects.filter(borrower=request.user).count()
+    todays_loans = Loan.objects.filter(application_date=timezone.now().date()).count()
+    yesterdays_loans = Loan.objects.filter(application_date=timezone.now().date() - timezone.timedelta(days=1)).count()
+    yesterday_loan_count = Loan.objects.filter(application_date=timezone.now().date() - timezone.timedelta(days=1)).count()
+    new_applications = Loan.objects.filter(application_date=timezone.now().date()).count()
+    last_week_loan_count = Loan.objects.filter(application_date__gte=timezone.now().date() - timezone.timedelta(days=7)).count()
+    disbursed_loans = disbursement.objects.filter(loan__borrower=request.user).count()
+    last_month_loan_count = Loan.objects.filter(application_date__month=timezone.now().month).count()
+    active_loans = Loan.objects.filter(status='active').count()
+    active_since_lastweek = Loan.objects.filter(application_date__gte=timezone.now().date() - timezone.timedelta(days=7)).count()
+    pending_approvals = Loan.objects.filter(status='pending').count()
+    pending_approval_since_lastweek = Loan.objects.filter(application_date__gte=timezone.now().date() - timezone.timedelta(days=7), status='pending').count()
+    total_repaid_loans = Repayment.objects.filter(loan__borrower=request.user).aggregate(Sum('amount'))['amount__sum'] or 0.0
+    total_repaid_loans_since_lastweek = Repayment.objects.filter(payment_date__gte=timezone.now().date() - timezone.timedelta(days=7), loan__borrower=request.user).aggregate(Sum('amount'))['amount__sum'] or 0.0
+    defaulted_loans = DefaultRecord.objects.filter(loan__borrower=request.user).count()
+    defaulters_since_lastmonth = DefaultRecord.objects.filter(marked_date__gte=timezone.now().date() - timezone.timedelta(days=30), loan__borrower=request.user).count()
+    context={'users':users,
+             'users_since_lastmonth': users_since_lastmonth,
+             'borrowers':borrowers,
+             'todays_loans':todays_loans,
+             'yesterdays_loans':yesterdays_loans,
+             'yesterday_loan_count':yesterday_loan_count,
+             'new_applications':new_applications,
+             'last_week_loan_count':last_week_loan_count,
+             'disbursed_loans':disbursed_loans,
+             'last_month_loan_count':last_month_loan_count,
+             'active_loans':active_loans,
+             'active_since_lastweek':active_since_lastweek,
+             'pending_approvals':pending_approvals,
+             'pending_approval_since_lastweek':pending_approval_since_lastweek,
+             'total_repaid_loans': total_repaid_loans,
+             'total_repaid_loans_since_lastweek': total_repaid_loans_since_lastweek,
+             'defaulted_loans': defaulted_loans,
+             'defaulters_since_lastmonth': defaulters_since_lastmonth,
+             }
     return render(request, 'index.html',context)
 
 
@@ -84,6 +132,23 @@ def profile(request,pk):
     }
     return render(request, 'profile.html', context)
     
+def edit_profile(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    user = request.user
+    if request.method == 'POST':
+        form = MyUserCreationForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully')
+            return redirect('profile', pk=user.id)
+        else:
+            messages.error(request, 'Error updating profile')
+    else:
+        form = MyUserCreationForm(instance=user)
+
+    return render(request, 'edit_profile.html', {'form': form})
 
 @login_required(login_url='login')  
 def chart(request):
@@ -116,18 +181,11 @@ def borrower_loans(request):
 
 @login_required(login_url='login')
 def borrower_details(request, pk):
-    borrower_det = get_object_or_404(Borrower, id=pk)
-    form = LoanApplicationForm(instance=borrower_det)
-
-    if request.method == 'POST':
-        form = LoanApplicationForm(request.POST, request.FILES, instance=borrower_det)
-        if form.is_valid():
-            form.save()
-            return redirect('application_list')
+    borrower_det = Loan.objects.filter(borrower=request.user).first()
 
     context = {
         'borrower_det': borrower_det,
-        'form': form
+        'borrower': request.user
     }
     return render(request, 'loans/borrower_details.html', context)
 
@@ -314,7 +372,14 @@ def decide_loan(request, application_id, decision):
 
 @login_required(login_url='login')
 def ContactPage(request):
-    return render(request,'contact.html')
+    form = ContactForm()
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Normally you'd handle form logic here (save or send email)
+            messages.success(request, 'Your message has been sent successfully!')
+            return redirect('contact')  # Use your URL name
+    return render(request, 'contact.html', {'form': form})
 
 @login_required(login_url='login')
 def disbursement_list(request):

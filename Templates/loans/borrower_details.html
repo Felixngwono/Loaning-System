@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Loan Details</h2>
+
+  <table class="table table-bordered">
+    <tr>
+      <th>Loan ID</th>
+      <td>{{ borrower_det.id }}</td>
+    </tr>
+    <tr>
+      <th>Borrower Name</th>
+      <td>{{user.name }}</td>
+    </tr>
+    <tr>
+      <th>Amount</th>
+      <td>{{ borrower_det.amount }}</td>
+    </tr>
+    <tr>
+      <th>Status</th>
+      <td>{{ borrower_det.status }}</td>
+    </tr>
+    <tr>
+      <th>Date Applied</th>
+      <td>{{ borrower_det.application_date }}</td>
+    </tr>
+    <tr>
+      <th>Purpose</th>
+      <td>{{ borrower_det.purpose }}</td>
+    </tr>
+  </table>
+
+  <a href="{% url 'borrower_loans' %}" class="btn btn-secondary">Back</a>
+</div>
+{% include "footer.html" %}
+{% endblock %}

@@ -6,15 +6,20 @@
   <link href="{% static 'css/profile.css' %}" rel="stylesheet" />
   <body>
 <section style="background-color: #eee;">
-  <div class="container py-5"style="background-image: url('{% static 'images/vr-bg.jpg' %}'); background-repeat: no-repeat; background-attachment: fixed; background-size: cover; background-position: right top;" >
+  <div class="container py-5"style="background-image: url('{% static 'images/vr-brg.jpg' %}'); background-repeat: no-repeat; background-attachment: fixed; background-size: cover; background-position: right top;" >
     <div class="row">
       <div class="col">
         <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
           <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url "index" %}">Home</a></li>
             <li class="breadcrumb-item"><a href="#">User</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{user.name}}'s Profile</li>
           </ol>
+          <div class="d-flex justify-content-end">
+          <a href="{% url 'edit_profile' %}" class="btn btn-primary items-right">Edit Profile</a>
+          <a href="{% url 'index' %}" class="btn btn-secondary me-2">Back to Home</a>
+
+          </div>
         </nav>
       </div>
     </div>
@@ -184,6 +189,6 @@
       </div>
     </div>
   </div>
-</section>
+</section>z
 </body>
 {% include "footer.html" %}

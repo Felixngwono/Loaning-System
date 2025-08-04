@@ -33,12 +33,10 @@
     </div>
     {% endif %}
 
-    {% if request.user.is_superuser %}
     <div class="mb-3">
       <label for="borrower" class="form-label">Borrower</label>
       {% render_field form.borrower class="form-control" id="borrower" %}
     </div>
-    {% endif %}
 
     <div class="mb-3">
       <label for="purpose" class="form-label">Purpose of Loan</label>

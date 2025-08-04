@@ -9,10 +9,10 @@
   <link rel="icon" type="image/png" href="{% static 'assets/img/favicon.png' %}">
   <title>Sign In</title>
   <!-- MDB CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.min.css" />
 
-<!-- MDB JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.min.js"></script>
+  <!-- MDB JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.min.js"></script>
 
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" rel="stylesheet" />
@@ -23,12 +23,39 @@
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <!-- CSS Files -->
   <link id="pagestyle" href="{% static 'assets/css/soft-ui-dashboard.css' %}" rel="stylesheet" />
-  <!-- Nepcha Analytics (nepcha.com) -->
-  <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
+  <!-- Nepcha Analytics -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 </head>
 
 <body class="">
+
+  <!-- Sign In Modal -->
+<div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="signInModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Login Info</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        {% if user.is_authenticated %}
+          <a href="{% url 'index' %}" class="btn btn-primary">Proceed to Index Page</a>
+        {% endif %}
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
   <div class="container position-sticky z-index-sticky top-0">
     <div class="row">
       <div class="col-12">
@@ -87,10 +114,9 @@
       </div>
     </div>
   </div>
-  <main class="main-content  mt-0">
+  <main class="main-content mt-0">
     <section>
       <!-- Sign In Page -->
-      
       <div class="page-header min-vh-75">
         <div class="container">
           <div class="row">
@@ -101,58 +127,42 @@
                   <p class="mb-0">Enter your email and password to sign in</p>
                 </div>
                 <div class="card-body">
-                     <div>
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                                    {{ message }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-
-                        {% if messages %}
-<script>
-  window.onload = () => {
-    const myModal = new mdb.Modal(document.getElementById('exampleModal'));
-    myModal.show();
-  }
-</script>
-{% endif %}
-
-      </div>
-                <form class="mb-4" action="" method="POST">
-  {% csrf_token %}
-  
-  <div class="mb-3">
-    <label for="email" class="form-label">Your email</label>
-    <input type="email" name="email" id="email" class="form-control" placeholder="name@gmail.com" required>
-  </div>
-
-  <div class="mb-3">
-    <label for="password" class="form-label">Password</label>
-    <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required>
-  </div>
-
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="remember" required>
-      <label class="form-check-label" for="remember">Remember me</label>
-    </div>
-    <a href="#" class="text-decoration-none">Forgot password?</a>
-  </div>
-
-<button type="submit" onclick="openLoginModal()" class="btn btn-success w-100">Login</button>
-</form>
-<div class="card-footer text-center pt-0 px-lg-2 px-1">
-                  <p class="mb-4 text-sm mx-auto">
-                    Don't have an account?
-                    <a href="{% url 'signup' %}" onclick="my_modal.openLoginModal()" class="text-info text-gradient font-weight-bold">Sign up</a>
-                  </p>
+                  <div>
+                    {% if messages %}
+                      {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                          {{ message }}
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                  <form class="mb-4" action="" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                      <label for="email" class="form-label">Your email</label>
+                      <input type="email" name="email" id="email" class="form-control" placeholder="name@gmail.com" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="password" class="form-label">Password</label>
+                      <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="remember" required>
+                        <label class="form-check-label" for="remember">Remember me</label>
+                      </div>
+                      <a href="#" class="text-decoration-none">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 " data-bs-toggle="modal" data-bs-target="#signInModal">Login</button>
+                  </form>
+                  <div class="card-footer text-center pt-0 px-lg-2 px-1">
+                    <p class="mb-4 text-sm mx-auto">
+                      Don't have an account?
+                      <a href="{% url 'signup' %}" class="text-info text-gradient font-weight-bold">Sign up</a>
+                    </p>
+                  </div>
                 </div>
-
-                </div>
-                
               </div>
             </div>
             <div class="col-md-6">
@@ -163,124 +173,56 @@
           </div>
         </div>
       </div>
-      
-            </form>
-
     </section>
   </main>
-  <!-- -------- START FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
+
+  <!-- -------- START FOOTER 3 ------- -->
   <footer class="footer py-5">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 mb-4 mx-auto text-center">
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-            Company
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-            About Us
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-            Team
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-            Products
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-            Blog
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-            Pricing
-          </a>
+          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">Company</a>
+          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">About Us</a>
+          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">Team</a>
+          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">Products</a>
+          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">Blog</a>
+          <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">Pricing</a>
         </div>
         <div class="col-lg-8 mx-auto text-center mb-4 mt-2">
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-            <span class="text-lg fab fa-dribbble"></span>
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-            <span class="text-lg fab fa-twitter"></span>
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-            <span class="text-lg fab fa-instagram"></span>
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-            <span class="text-lg fab fa-pinterest"></span>
-          </a>
-          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-            <span class="text-lg fab fa-github"></span>
-          </a>
+          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4"><span class="text-lg fab fa-dribbble"></span></a>
+          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4"><span class="text-lg fab fa-twitter"></span></a>
+          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4"><span class="text-lg fab fa-instagram"></span></a>
+          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4"><span class="text-lg fab fa-pinterest"></span></a>
+          <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4"><span class="text-lg fab fa-github"></span></a>
         </div>
       </div>
       <div class="row">
         <div class="col-8 mx-auto text-center mt-1">
           <p class="mb-0 text-secondary">
-            Copyright © <script>
-              document.write(new Date().getFullYear())
-            </script> Soft by Creative Tim.
+            Copyright © <script>document.write(new Date().getFullYear())</script> Soft by Creative Tim.
           </p>
         </div>
       </div>
     </div>
   </footer>
+
   <script src="{% static 'assets/js/core/popper.min.js' %}"></script>
   <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
   <script src="{% static 'assets/js/plugins/perfect-scrollbar.min.js' %}"></script>
   <script src="{% static 'assets/js/plugins/smooth-scrollbar.min.js' %}"></script>
-  <script>
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-    }
-  </script>
-  <!-- Button trigger modal -->
-
-<!-- Trigger Button -->
-
-<!-- Modal -->
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Login Success</h5>
-        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        You have successfully logged in!
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Continue</button>
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-  function openLoginModal() {
-    const myModal = new mdb.Modal(document.getElementById('exampleModal'));
-    myModal.show();
-  }
-</script>
-
-
-<!-- MDB JS -->
-<script type="module">
-  import { Modal } from "mdb-ui-kit";
-
-  // Function to open the modal on button click
-  window.openLoginModal = function () {
-    const modalEl = document.getElementById('exampleModal');
-    const modal = new Modal(modalEl);
-    modal.show();
-  };
-</script>
-
-  <!-- Github buttons -->
+  
   <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{% static 'assets/js/soft-ui-dashboard.min.js' %}"></script>
+
+  {% if show_modal %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var loginModal = new bootstrap.Modal(document.getElementById('signInModal'));
+    loginModal.show();
+  });
+</script>
+{% endif %}
+
 </body>
 
 </html>

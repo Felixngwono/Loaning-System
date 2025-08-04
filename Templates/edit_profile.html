@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+{% load widget_tweaks %}
+<div class="container mt-5">
+    <h2>Edit Profile</h2>
+     <div>
+        {% if form.errors %}
+          <div class="mb-3 p-2 rounded bg-danger-subtle border border-danger text-danger">
+            <ul class="mb-0 ps-3">
+              {% for field in form %}
+                {% for error in field.errors %}
+                  <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                {% endfor %}
+              {% endfor %}
+              {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      </div>
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ user.profile.url }}" class="rounded-circle img-fluid" style="width: 200px; height: 200px;" alt="Profile Image">
+        </div>
+        <div class="col-md-6">
+            <h3>{{ user.username }}</h3>
+            <p><strong>Profession:</strong> {{ user.profession }}</p>
+            <p><strong>Address:</strong> {{ user.address }}</p>
+        </div>
+    </div>
+        <br><br>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            {% render_field form.name class="form-control" id="name" name="name" %}
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">username</label>
+            {% render_field form.username class="form-control" id="username" name="username" %}
+        </div>
+         <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            {% render_field form.email class="form-control" id="email" name="email" %}  
+        </div>
+        <div class="mb-3">
+            <label for="gender" class="form-label">Gender</label>
+            {% render_field form.gender class="form-control" id="gender" name="gender" %}  
+        </div>
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            {% render_field form.phone_number class="form-control" id="phone" name="phone" %}
+        </div>
+        <div class="mb-3">
+            <label for="profession" class="form-label">Profession</label>
+            {% render_field form.profession class="form-control" id="profession" name="profession" %}
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label">Address</label>
+            {% render_field form.address class="form-control" id="address" name="address" %}
+        </div>
+        <div class="mb-3">
+            <label for="profile" class="form-label">Profile Image</label>
+            {% render_field form.profile class="form-control" id="profile" name="profile" %}    
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            {% render_field form.password1 class="form-control" id="password" name="password" %} 
+        </div>
+        <div class="mb-3">
+            <label for="confirm_password" class="form-label">Confirm Password</label>
+            {% render_field form.password2 class="form-control" id="confirm_password" name="confirm_password" %}
+        </div>
+       
+            
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+</div>
+{% include "footer.html" %}
+{% endblock %}

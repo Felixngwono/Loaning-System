@@ -188,8 +188,8 @@
         {% render_field form.age type='date' class="form-control" placeholder="Enter Age" required="" %}
       </div>
       <div class="mb-3">
-        <label for="age" class="form-label fw-semibold">Your Age</label>
-        {% render_field form.profession type='date' class="form-control" placeholder="Enter Age" required="" %}
+        <label for="age" class="form-label fw-semibold">Your Profession</label>
+        {% render_field form.profession  class="form-control" placeholder="Enter Profession" required="" %}
       </div>
       <div class="mb-3">
         <label for="file_input" class="form-label fw-semibold">Upload Profile</label>
@@ -215,7 +215,7 @@
                     </label>
                   </div>
                   <div class="text-center">
-                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign up</button>
+                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2" data-bs-toggle="modal" data-bs-target="#register">Sign up</button>
                   </div>
                   <p class="text-sm mt-3 mb-0">Already have an account? <a href="{% url "login" %}" class="text-dark font-weight-bolder">Sign in</a></p>
                 </form>
@@ -302,23 +302,37 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Registration Modal</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ...
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        {% else %}
+        {% endif %}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary">Register</button>
       </div>
     </div>
   </div>
 </div>
+{% if show_modal %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var registerModal = new bootstrap.Modal(document.getElementById('register'));
+    registerModal.show();
+  });
+</script>
+{% endif %}
+</body>
 </html>

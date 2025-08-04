@@ -17,9 +17,14 @@ class User(AbstractUser):
     is_enduser=models.BooleanField(default=False)
     profession=models.CharField(max_length=100,null=True,blank=False)
     profile=models.FileField(null=True, blank=True, upload_to='profiles/', default="avatar.png")
+    date_joined=models.DateTimeField(auto_now_add=True)
     
     USERNAME_FIELD='email'
     REQUIRED_FIELDS= ['name']
+
+    class Meta:
+        
+        ordering = ['-date_joined']
 
 def __str__(self):
     return self.email
@@ -32,6 +37,11 @@ class Borrower(models.Model):
     address = models.TextField()
     occupation = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Borrower'
+        verbose_name_plural = 'Borrowers'
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.user.get_full_name()
@@ -48,6 +58,11 @@ class LoanApplication(models.Model):
     status = models.CharField(max_length=10, choices=status_choices, default='PENDING')
     submitted_at = models.DateTimeField(auto_now_add=True)
     reviewed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Loan Application'
+        verbose_name_plural = 'Loan Applications'
+        ordering = ['-submitted_at']
 
     def __str__(self):
         return f"{self.borrower} - KES {self.amount_requested}"
@@ -67,6 +82,10 @@ class Loan(models.Model):
     application_date = models.DateField(auto_now_add=True)
     approval_date = models.DateField(null=True, blank=True)
 
+    class Meta:
+        
+        ordering = ['-application_date']
+
     def __str__(self):
         return f"{self.borrower.username} - {self.amount} ({self.status})"
 
@@ -77,6 +96,13 @@ class Repayment(models.Model):
     payment_date = models.DateField()
     transaction_reference = models.CharField(max_length=100, unique=True)
     method = models.CharField(max_length=50, default='cash', choices=[('cash', 'Cash'), ('mpesa', 'Mpesa'), ('bank', 'Bank Transfer')])
+    status = models.CharField(max_length=20, default='pending', choices=[('pending', 'Pending'), ('completed', 'Completed'), ('failed', 'Failed')])
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    payment_date = models.DateField(auto_now_add=True)
+
+    class Meta:
+        
+        ordering = ['-payment_date']
 
     def __str__(self):
         return f"Repayment of {self.amount_paid} on {self.payment_date}"

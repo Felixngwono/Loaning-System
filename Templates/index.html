@@ -11,252 +11,261 @@
                         <h1 class="mt-4">User's Dashboard</h1>
                         
                         {% endif %}
-                        <div class="container-fluid py-4">
-      <div class="row">
- <!-- Total Borrowers -->
-<div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-  <div class="card bg-light border-0 shadow-sm position-relative">
-    <div class="card-body p-4">
-      <div class="row">
-        <div class="col-8">
-          <p class="fs-6 text-uppercase text-muted fw-bold mb-1">Total Borrowers</p>
-          <h4 class="fw-bold text-primary">{{ borrowers_count }}</h4>
-          <p class="mb-1">
-            <span class="text-success fw-semibold">+12%</span>
-            <span class="text-muted">since last month</span>
-          </p>
-        </div>
-        <div class="col-4 text-end position-relative">
-          <div class="icon icon-shape bg-gradient-primary text-white rounded-circle shadow mb-2">
-            <i class="fas fa-users fs-4 opacity-75"></i>
-          </div>
-          <div>
-            <i class="fas fa-user-friends text-primary fs-5"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card-footer bg-primary d-flex align-items-center justify-content-between text-white">
-      <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
-      <i class="fas fa-angle-right fs-6"></i>
-    </div>
-  </div>
-</div>
-
-<!-- Loans Issued Today -->
-<div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-  <div class="card bg-light border-0 shadow-sm">
-    <div class="card-body p-4">
-      <div class="row">
-        <div class="col-8">
-          <p class="fs-6 text-uppercase text-muted fw-bold mb-1">Loans Issued Today</p>
-          <h4 class="fw-bold text-danger">{{ loans_today }}</h4>
-          <p class="mb-1">
-            <span class="text-success fw-semibold">+8%</span>
-            <span class="text-muted">compared to yesterday</span>
-          </p>
-        </div>
-        <div class="col-4 text-end position-relative">
-          <div class="icon icon-shape bg-gradient-danger text-white rounded-circle shadow mb-2">
-            <i class="fas fa-hand-holding-usd fs-4 opacity-75"></i>
-          </div>
-          <div>
-            <i class="fas fa-money-bill-wave text-danger fs-5"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card-footer bg-danger d-flex align-items-center justify-content-between text-white">
-      <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
-      <i class="fas fa-angle-right fs-6"></i>
-    </div>
-  </div>
-</div>
-
-<!-- New Loan Applications -->
-<div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-  <div class="card bg-light border-0 shadow-sm">
-    <div class="card-body p-4">
-      <div class="row">
-        <div class="col-8">
-          <p class="fs-6 text-uppercase text-muted fw-bold mb-1">New Applications</p>
-          <h4 class="fw-bold text-success">{{ new_applications }}</h4>
-          <p class="mb-1">
-            <span class="text-danger fw-semibold">-5%</span>
-            <span class="text-muted">since last week</span>
-          </p>
-        </div>
-        <div class="col-4 text-end position-relative">
-          <div class="icon icon-shape bg-gradient-success text-white rounded-circle shadow mb-2">
-            <i class="fas fa-file-signature fs-4 opacity-75"></i>
-          </div>
-          <div>
-            <i class="fas fa-user-plus text-success fs-5"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card-footer bg-success d-flex align-items-center justify-content-between text-white">
-      <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
-      <i class="fas fa-angle-right fs-6"></i>
-    </div>
-  </div>
-</div>
-
-<!-- Total Disbursed Amount -->
-<div class="col-xl-3 col-sm-6">
-  <div class="card bg-light border-0 shadow-sm">
-    <div class="card-body p-4">
-      <div class="row">
-        <div class="col-8">
-          <p class="fs-6 text-uppercase text-muted fw-bold mb-1">Total Disbursed</p>
-          <h4 class="fw-bold text-warning">KES {{ total_disbursed|floatformat:2 }}</h4>
-          <p class="mb-1">
-            <span class="text-success fw-semibold">+10%</span>
-            <span class="text-muted">this month</span>
-          </p>
-        </div>
-        <div class="col-4 text-end position-relative">
-          <div class="icon icon-shape bg-gradient-warning text-white rounded-circle shadow mb-2">
-            <i class="fas fa-piggy-bank fs-4 opacity-75"></i>
-          </div>
-          <div>
-            <i class="fas fa-chart-line text-warning fs-5"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card-footer bg-warning d-flex align-items-center justify-content-between text-white">
-      <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
-      <i class="fas fa-angle-right fs-6"></i>
-    </div>
-  </div>
-</div>
-<!-- Active Loans -->
-<div class="col-xl-3 col-sm-6 mb-4">
-  <div class="card bg-light border-0 shadow-sm">
-    <div class="card-body p-4">
-      <div class="row">
-        <div class="col-8">
-          <p class="fs-6 text-uppercase text-muted fw-bold mb-1">Active Loans</p>
-          <h4 class="fw-bold text-info">{{ active_loans }}</h4>
-          <p class="mb-1">
-            <span class="text-success fw-semibold">+7%</span>
-            <span class="text-muted">since last week</span>
-          </p>
-        </div>
-        <div class="col-4 text-end">
-          <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow mb-2">
-            <i class="fas fa-clipboard-list fs-4 opacity-75"></i>
-          </div>
-          <div>
-            <i class="fas fa-briefcase text-info fs-5"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card-footer bg-info d-flex align-items-center justify-content-between text-white">
-      <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
-      <i class="fas fa-angle-right fs-6"></i>
-    </div>
-  </div>
-</div>
-
-<!-- Pending Approvals -->
-<div class="col-xl-3 col-sm-6 mb-4">
-  <div class="card bg-light border-0 shadow-sm">
-    <div class="card-body p-4">
-      <div class="row">
-        <div class="col-8">
-          <p class="fs-6 text-uppercase text-muted fw-bold mb-1">Pending Approvals</p>
-          <h4 class="fw-bold text-secondary">{{ pending_approvals }}</h4>
-          <p class="mb-1">
-            <span class="text-warning fw-semibold">+4%</span>
-            <span class="text-muted">since yesterday</span>
-          </p>
-        </div>
-        <div class="col-4 text-end">
-          <div class="icon icon-shape bg-gradient-secondary text-white rounded-circle shadow mb-2">
-            <i class="fas fa-hourglass-half fs-4 opacity-75"></i>
-          </div>
-          <div>
-            <i class="fas fa-clock text-secondary fs-5"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card-footer bg-secondary d-flex align-items-center justify-content-between text-white">
-      <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
-      <i class="fas fa-angle-right fs-6"></i>
-    </div>
-  </div>
-</div>
-
-<!-- Total Repaid -->
-<div class="col-xl-3 col-sm-6 mb-4">
-  <div class="card bg-light border-0 shadow-sm">
-    <div class="card-body p-4">
-      <div class="row">
-        <div class="col-8">
-          <p class="fs-6 text-uppercase text-muted fw-bold mb-1">Total Repaid</p>
-          <h4 class="fw-bold text-success">KES {{ total_repaid|floatformat:2 }}</h4>
-          <p class="mb-1">
-            <span class="text-success fw-semibold">+9%</span>
-            <span class="text-muted">this quarter</span>
-          </p>
-        </div>
-        <div class="col-4 text-end">
-          <div class="icon icon-shape bg-gradient-success text-white rounded-circle shadow mb-2">
-            <i class="fas fa-credit-card fs-4 opacity-75"></i>
-          </div>
-          <div>
-            <i class="fas fa-receipt text-success fs-5"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card-footer bg-success d-flex align-items-center justify-content-between text-white">
-      <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
-      <i class="fas fa-angle-right fs-6"></i>
-    </div>
-  </div>
-</div>
-
-<!-- Defaulted Loans -->
-<div class="col-xl-3 col-sm-6 mb-4">
-  <div class="card bg-light border-0 shadow-sm">
-    <div class="card-body p-4">
-      <div class="row">
-        <div class="col-8">
-          <p class="fs-6 text-uppercase text-muted fw-bold mb-1">Defaulted Loans</p>
-          <h4 class="fw-bold text-danger">{{ defaulted_loans }}</h4>
-          <p class="mb-1">
-            <span class="text-danger fw-semibold">+2%</span>
-            <span class="text-muted">vs last month</span>
-          </p>
-        </div>
-        <div class="col-4 text-end">
-          <div class="icon icon-shape bg-gradient-danger text-white rounded-circle shadow mb-2">
-            <i class="fas fa-exclamation-circle fs-4 opacity-75"></i>
-          </div>
-          <div>
-            <i class="fas fa-ban text-danger fs-5"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card-footer bg-danger d-flex align-items-center justify-content-between text-white">
-      <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
-      <i class="fas fa-angle-right fs-6"></i>
-    </div>
-  </div>
-</div>
-
-
      
-    
-     
+<div class="container-fluid py-4">
+  <div class="row">
+    {% comment "Repeatable Card Block Template" %}
+    <!-- Each card below reuses the improved styling -->
+    {% endcomment %}
+
+    <!-- Total Borrowers -->
+    <div class="col-xl-3 col-sm-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-8">
+              <p class="text-uppercase text-muted fw-bold mb-1">Total Borrowers Today</p>
+              <h4 class="fw-bold text-primary">{{ borrowers }}</h4>
+              <p class="mb-1">
+                <span class="text-success fw-semibold">{{todays_loans}}</span>
+                <span class="text-muted"> Borrowers Today</span>
+              </p>
+            </div>
+            <div class="col-4 text-end">
+              <i class="fas fa-user-friends text-primary fs-5"></i>
+            </div>
+          </div>
+        </div>
+        {% if request.user.is_superuser %}
+        <div class="card-footer bg-primary d-flex align-items-center justify-content-between text-white">
+          <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
+          <i class="fas fa-angle-right fs-6"></i>
+        </div>
+        {% endif %}
+      </div>
     </div>
+
+    <!-- Loans Issued Today -->
+    <div class="col-xl-3 col-sm-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-8">
+              <p class="text-uppercase text-muted fw-bold mb-1">Loans Issued Yesterday</p>
+              <h4 class="fw-bold text-danger">{{ yesterdays_loans }}</h4>
+              <p class="mb-1">
+                <span class="text-success fw-semibold">{{yesterday_loan_count}}</span>
+                <span class="text-muted">Loans yesterday</span>
+              </p>
+            </div>
+            <div class="col-4 text-end">
+              <i class="fas fa-money-bill-wave text-danger fs-5"></i>
+            </div>
+          </div>
+        </div>
+        {% if request.user.is_superuser %}
+        <div class="card-footer bg-danger d-flex align-items-center justify-content-between text-white">
+          <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
+          <i class="fas fa-angle-right fs-6"></i>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- New Applications -->
+    <div class="col-xl-3 col-sm-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-8">
+              <p class="text-uppercase text-muted fw-bold mb-1">New Applications</p>
+              <h4 class="fw-bold text-success">{{ new_applications }}</h4>
+              <p class="mb-1">
+                <span class="text-danger fw-semibold">{{last_week_loan_count}}</span>
+                <span class="text-muted">Applicants since last week</span>
+              </p>
+            </div>
+            <div class="col-4 text-end">
+              <i class="fas fa-user-plus text-success fs-5"></i>
+            </div>
+          </div>
+        </div>
+        {% if request.user.is_superuser %}
+        <div class="card-footer bg-success d-flex align-items-center justify-content-between text-white">
+          <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
+          <i class="fas fa-angle-right fs-6"></i>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Total Disbursed -->
+    <div class="col-xl-3 col-sm-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-8">
+              <p class="text-uppercase text-muted fw-bold mb-1">Total Disbursed</p>
+              <h4 class="fw-bold text-warning">KES {{ disbursed_loans|floatformat:2 }}</h4>
+              <p class="mb-1">
+                <span class="text-success fw-semibold">{{last_month_loans}}</span>
+                <span class="text-muted">{{last_month_loan_count}} loans this month</span>
+              </p>
+            </div>
+            <div class="col-4 text-end">
+              <i class="fas fa-chart-line text-warning fs-5"></i>
+            </div>
+          </div>
+        </div>
+        {% if request.user.is_superuser %}
+        <div class="card-footer bg-warning d-flex align-items-center justify-content-between text-white">
+          <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
+          <i class="fas fa-angle-right fs-6"></i>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Active Loans -->
+    <div class="col-xl-3 col-sm-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-8">
+              <p class="text-uppercase text-muted fw-bold mb-1">Active Loans</p>
+              <h4 class="fw-bold text-info">{{ active_loans }}</h4>
+              <p class="mb-1">
+                <span class="text-success fw-semibold">{{active_since_lastweek}}</span>
+                <span class="text-muted">Loan since last week</span>
+              </p>
+            </div>
+            <div class="col-4 text-end">
+              <i class="fas fa-briefcase text-info fs-5"></i>
+            </div>
+          </div>
+        </div>
+        {% if request.user.is_superuser %}
+        <div class="card-footer bg-info d-flex align-items-center justify-content-between text-white">
+          <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
+          <i class="fas fa-angle-right fs-6"></i>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Pending Approvals -->
+    <div class="col-xl-3 col-sm-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-8">
+              <p class="text-uppercase text-muted fw-bold mb-1">Pending Approvals</p>
+              <h4 class="fw-bold text-secondary">{{ pending_approvals }}</h4>
+              <p class="mb-1">
+                <span class="text-warning fw-semibold">{{pending_approval_since_lastweek}}%</span>
+                <span class="text-muted">since last week</span>
+              </p>
+            </div>
+            <div class="col-4 text-end">
+              <i class="fas fa-clock text-secondary fs-5"></i>
+            </div>
+          </div>
+        </div>
+                {% if request.user.is_superuser %}
+
+        <div class="card-footer bg-secondary d-flex align-items-center justify-content-between text-white">
+          <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
+          <i class="fas fa-angle-right fs-6"></i>
+        </div>
+                {% endif %}   
+      </div>
+    </div>
+
+    <!-- Total Repaid -->
+    <div class="col-xl-3 col-sm-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-8">
+              <p class="text-uppercase text-muted fw-bold mb-1">Total Repaid</p>
+              <h4 class="fw-bold text-success">KES {{ total_repaid_loans|floatformat:2 }}</h4>
+              <p class="mb-1">
+                <span class="text-success fw-semibold">KES {{ total_repaid_loans_since_lastweek|floatformat:2 }}</span>
+                <span class="text-muted">Since last week</span>
+              </p>
+            </div>
+            <div class="col-4 text-end">
+              <i class="fas fa-receipt text-success fs-5"></i>
+            </div>
+          </div>
+        </div>
+                {% if request.user.is_superuser %}
+
+        <div class="card-footer bg-success d-flex align-items-center justify-content-between text-white">
+          <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
+          <i class="fas fa-angle-right fs-6"></i>
+        </div>
+                {% endif %}
+      </div>
+    </div>
+
+    <!-- Defaulted Loans -->
+    <div class="col-xl-3 col-sm-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-8">
+              <p class="text-uppercase text-muted fw-bold mb-1">Defaulted Loans</p>
+              <h4 class="fw-bold text-danger">{{ defaulted_loans }}</h4>
+              <p class="mb-1">
+                <span class="text-danger fw-semibold">{{defaulters_since_lastmonth}}</span>
+                <span class="text-muted"> last month</span>
+              </p>
+            </div>
+            <div class="col-4 text-end">
+              <i class="fas fa-ban text-danger fs-5"></i>
+            </div>
+          </div>
+        </div>
+                {% if request.user.is_superuser %}
+
+        <div class="card-footer bg-danger d-flex align-items-center justify-content-between text-white">
+          <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
+          <i class="fas fa-angle-right fs-6"></i>
+        </div>
+                {% endif %}
+      </div>
+    </div>
+
+    <!-- Total Users -->
+    <div class="col-xl-3 col-sm-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-8">
+              <p class="text-uppercase text-muted fw-bold mb-1">Total Users</p>
+              <h4 class="fw-bold text-primary">{{ users }}</h4>
+              <p class="mb-1">
+                <span class="text-success fw-semibold">{{users_since_lastmonth}}</span>
+                <span class="text-muted">since last month</span>
+              </p>
+            </div>
+            <div class="col-4 text-end">
+              <i class="fas fa-users text-primary fs-5"></i>
+            </div>
+          </div>
+        </div>
+        {% if request.user.is_superuser %}
+        <div class="card-footer bg-primary d-flex align-items-center justify-content-between text-white">
+          <a class="fs-6 text-white text-decoration-none" href="#">View Details</a>
+          <i class="fas fa-angle-right fs-6"></i>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
                         <div class="row">
                             <div class="col-xl-6">
                                 <div class="card mb-4">

@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import ContactPage,  add_to_cart,  base, borrower_details, decide_loan, defaulted_loans, disbursement_list, loan_approval_list, loan_cart, loan_table_view, qualify_applicant, repayment, signup,loginpage, index, view_cart, welcoming, profile,logoutuser, chart , apply_for_loan , loan_success , borrower_loans
+from .views import ContactPage,  add_to_cart,  base, borrower_details, decide_loan, defaulted_loans, disbursement_list, edit_profile, loan_approval_list, loan_cart, loan_table_view, qualify_applicant, repayment, signup,loginpage, index, view_cart, welcoming, profile,logoutuser, chart , apply_for_loan , loan_success , borrower_loans
 
 urlpatterns = [
     path('', welcoming, name='welcoming'),
@@ -10,6 +10,7 @@ urlpatterns = [
     path('login/', loginpage, name='login'),
     path('logout/', logoutuser, name='logout'),
     path('profile/<str:pk>/', profile, name='profile'),
+    path('edit_profile/', edit_profile, name='edit_profile'),
 
     path('index/', index, name='index'),
 
