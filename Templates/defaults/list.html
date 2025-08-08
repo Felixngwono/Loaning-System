@@ -11,30 +11,44 @@
       <thead class="table-danger">
         <tr>
           <th>#</th>
-          <th>Borrower</th>
           <th>Loan ID</th>
-          <th>Amount Due (KES)</th>
-          <th>Due Date</th>
-          <th>Status</th>
+          <th>Borrower</th>
+          <th>Amount (KES)</th>
+          <th>Application Date</th>
+          <th>Marked Date</th>
+          <th>Resolved</th>
+          <th>Purpose</th>
+          <th>Interest (%)</th>
+          <th>Term (Months)</th>
+          <th>Reason for Default</th>
         </tr>
       </thead>
       <tbody>
         {% for default in defaults %}
         <tr>
           <td>{{ forloop.counter }}</td>
-          <td>{{ default.loan.borrower.user.get_full_name }}</td>
           <td>{{ default.loan.id }}</td>
-          <td>{{ default.amount_due }}</td>
-          <td>{{ default.due_date }}</td>
           <td>
-            {% if default.status == "Overdue" %}
-              <span class="badge bg-danger">Overdue</span>
-            {% elif default.status == "Pending" %}
-              <span class="badge bg-warning text-dark">Pending</span>
+            {% if default.loan.borrower.get_full_name %}
+              {{ default.loan.borrower.get_full_name }}
             {% else %}
-              <span class="badge bg-success">Paid</span>
+              {{ default.loan.borrower.username }}
             {% endif %}
           </td>
+          <td>{{ default.loan.amount }}</td>
+          <td>{{ default.loan.application_date }}</td>
+          <td>{{ default.marked_date }}</td>
+          <td>
+            {% if default.resolved %}
+              <span class="badge bg-success">Resolved</span>
+            {% else %}
+              <span class="badge bg-danger">Unresolved</span>
+            {% endif %}
+          </td>
+          <td>{{ default.loan.purpose }}</td>
+          <td>{{ default.loan.interest_rate }}</td>
+          <td>{{ default.loan.term_months }}</td>
+          <td>{{ default.reason }}</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -43,6 +57,14 @@
   {% else %}
   <div class="alert alert-success text-center">
     No defaulters found.
+  </div>
+  {% endif %}
+
+  {% if request.user.is_staff or request.user.is_superuser %}
+  <div class="text-center mt-4">
+    <a href="{% url 'add_defaulter' %}" class="btn btn-danger">
+      Add New Defaulter
+    </a>
   </div>
   {% endif %}
 

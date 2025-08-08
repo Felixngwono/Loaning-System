@@ -51,14 +51,14 @@ class LoanApplication(models.Model):
     amount_requested = models.DecimalField(max_digits=12, decimal_places=2)
     purpose = models.TextField()
     status_choices = [
-        ('PENDING', 'Pending'),
-        ('APPROVED', 'Approved'),
-        ('REJECTED', 'Rejected'),
+        ('pending', 'pending'),
+        ('approved', 'approved'),
+        ('rejected', 'rejected'),
     ]
     status = models.CharField(max_length=10, choices=status_choices, default='PENDING')
     submitted_at = models.DateTimeField(auto_now_add=True)
     reviewed_at = models.DateTimeField(null=True, blank=True)
-
+    
     class Meta:
         verbose_name = 'Loan Application'
         verbose_name_plural = 'Loan Applications'
@@ -79,6 +79,11 @@ class Loan(models.Model):
     interest_rate = models.FloatField()
     purpose = models.TextField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    national_id = models.CharField(max_length=20, unique=True,null= True)
+    phone = models.CharField(max_length=15,null=True)
+    address = models.TextField(null=True)
+    occupation = models.CharField(max_length=100, blank=True)
+
     application_date = models.DateField(auto_now_add=True)
     approval_date = models.DateField(null=True, blank=True)
 
@@ -122,6 +127,9 @@ class DefaultRecord(models.Model):
     reason = models.TextField()
     marked_date = models.DateField(auto_now_add=True)
     resolved = models.BooleanField(default=False)
+
+    class Meta:
+        ordering=['-marked_date']
 
     def __str__(self):
         return f"Defaulted: {self.loan}"

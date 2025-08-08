@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Loan Officers</h2>
+    <a href="{% url 'add_loan_officer' %}" class="btn btn-primary mb-3">Add Loan Officer</a>
+
+    {% if officers %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Staff ID</th>
+                    <th>Username</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for officer in officers %}
+                    <tr>
+                        <td>{{ officer.user.get_full_name }}</td>
+                        <td>{{ officer.staff_id }}</td>
+                        <td>{{ officer.user.username }}</td>
+                        <td>
+                            <a href="{% url 'edit_loan_officer' officer.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No loan officers found.</p>
+    {% endif %}
+</div>
+{% endblock %}

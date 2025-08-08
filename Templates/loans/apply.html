@@ -37,7 +37,18 @@
       <label for="borrower" class="form-label">Borrower</label>
       {% render_field form.borrower class="form-control" id="borrower" %}
     </div>
-
+    <div class="mb-3">
+      <label for="national_id" class="form-label">national_id</label>
+      {% render_field form.national_id class="form-control" id="national_id" %}
+    </div>
+    <div class="mb-3">
+      <label for="phone" class="form-label">phone</label>
+      {% render_field form.phone class="form-control" id="phone" %}
+    </div>
+    <div class="mb-3">
+      <label for="occupation" class="form-label">occupation</label>
+      {% render_field form.occupation class="form-control" id="occupation" %}
+    </div>
     <div class="mb-3">
       <label for="purpose" class="form-label">Purpose of Loan</label>
       {% render_field form.purpose class="form-control" id="purpose" %}
@@ -47,7 +58,10 @@
       <label for="status" class="form-label">Status</label>
       {% render_field form.status class="form-control" id="status" %}
     </div>
-
+    <div class="mb-3">
+      <label for="address" class="form-label">address</label>
+      {% render_field form.address class="form-control" id="address" %}
+    </div>
     <div class="mb-3">
       <label for="amount" class="form-label">Amount</label>
       {% render_field form.amount class="form-control" id="amount" %}
@@ -85,7 +99,8 @@
       <div class="modal-footer">
  {% if user.is_authenticated %}
           <a href="{% url 'index' %}" class="btn btn-primary">submit application</a>
-        {% endif %}        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        {% endif %}       
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

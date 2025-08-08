@@ -3,8 +3,8 @@
 {% load static %}
                
                     {% if request.user.is_superuser %}
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4"> Admin's Dashboard</h1>
+                    <div class="container-fluid px-4 text-center ">
+                        <h1 class="mt-4"><b> Admin's Dashboard</b></h1>
                         
                          {% else %} 
                          <div class="container-fluid px-4">
@@ -270,7 +270,9 @@
                                         <i class="fas fa-chart-area me-1"></i>
                                         Area Chart Example
                                     </div>
+                                    
                                     <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                                    <script src='{% static "assets/demo/chart-area-demo.js" %}'></script>
                                 </div>
                             </div>
                             <div class="col-xl-6">
@@ -279,8 +281,12 @@
                                         <i class="fas fa-chart-bar me-1"></i>
                                         Bar Chart Example
                                     </div>
+
                                     <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-                                </div>
+                                    <script src="{% static 'assets/demo/chart-bar-demo.js' %}"></script>
+
+                                  </div>
+
                             </div>
                             <div class="col-xl-6">
                                 <div class="card mb-4">
@@ -291,7 +297,44 @@
                                     <div class="card-body">
                                         <canvas id="myPieChart" width="100%" height="40"></canvas>
                                     </div>
-                                  <script src="{% static 'assets/demo/chart-pie-demo.js' %}"></script>
+                                  <script >
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                            var ctx = document.getElementById("myPieChart").getContext('2d');
+                                            new Chart(ctx, {
+                                                type: 'pie',
+                                                data: {
+                                                    labels:  {{ pie_labels|safe }},
+                                                    datasets: [{
+                                                        data: {{ pie_data|safe }},
+                                                        backgroundColor: [
+                                                              "#dc3545",  // Red - e.g. Defaulted
+                                                              "#007bff",  // Blue - e.g. Active
+                                                              "#ffc107",  // Yellow - e.g. Pending
+                                                              "#28a745",  // Green - e.g. Approved
+                                                              "#6f42c1",  // Purple - e.g. Reviewed
+                                                              "#fd7e14",  // Orange - e.g. Overdue
+                                                              "#20c997",  // Teal
+                                                              "#6610f2",  // Indigo
+                                                              "#e83e8c",  // Pink
+                                                              "#adb5bd",  // Gray
+                                                            
+                                                        ],
+                                                    }],
+                                                },
+                                                options: {
+                                                    responsive: true,
+                                                    plugins: {
+                                                        legend: {
+                                                            position: 'top',
+                                                        },
+                                                        title: {
+                                                            display: false,
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        });
+                                  </script>
                                 </div>
                             </div>
 
@@ -304,7 +347,45 @@
                                     <div class="card-body">
                                         <canvas id="mixedpolarChart" width="100%" height="40"></canvas>
                                     </div>
-                                    <script src="{% static 'assets/demo/mixed-polar.js' %}"></script>
+                                    <script >
+                                       document.addEventListener("DOMContentLoaded", function() {
+                                            var ctx = document.getElementById('mixedpolarChart').getContext('2d');
+                                            new Chart(ctx, {
+                                                type: 'polarArea',
+                                                data: {
+                                                    labels: {{polar_label|safe}},
+                                                    datasets: [{
+                                                        label: 'Dataset 1',
+                                                        data: {{polar_data|safe}},
+                                                        backgroundColor: [
+                                                            'rgba(255, 99, 132, 0.5)',
+                                                            'rgba(75, 192, 192, 0.5)',
+                                                            'rgba(255, 205, 86, 0.5)',
+                                                            'rgba(54, 162, 235, 0.5)',
+                                                            'rgba(153, 102, 255, 0.5)'
+                                                        ],
+                                                        borderColor: [
+                                                            'rgba(255, 99, 132, 1)',
+                                                            'rgba(75, 192, 192, 1)',
+                                                            'rgba(255, 205, 86, 1)',
+                                                            'rgba(54, 162, 235, 1)',
+                                                            'rgba(153, 102, 255, 1)'
+                                                        ],
+                                                        borderWidth: 1
+                                                    }]
+                                                },
+                                                options: {
+                                                    responsive: true,
+                                                    legend: {
+                                                        position: 'right'
+                                                    },
+                                                    title: {
+                                                        display: false
+                                                    }
+                                                }
+                                            });
+                                        });
+                                    </script>
                                 </div>
                             </div>
 
@@ -319,10 +400,14 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
+                                            <th>Loan ID</th>
                                             <th>Borrower</th>
+                                            <th>National ID</th>
+                                            <th>Phone</th>
+                                            <th>Address</th>
                                             <th>Purpose</th>
                                             <th>Amount</th>
-                                            <th>Appliacation Date</th>
+                                            <th>Application Date</th>
                                             <th>approval_date</th>
                                             <th>Status</th>
                                             
@@ -330,7 +415,11 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
+                                          <th>Loan ID</th>
                                             <th>Borrower</th>
+                                            <th>National ID</th>
+                                            <th>Phone</th>
+                                            <th>Address</th>
                                             <th>Purpose</th>
                                             <th>Amount</th>
                                             <th>Application Date</th>
@@ -341,7 +430,11 @@
                                     <tbody>
                                       {% for x in borrowerss %}
                                         <tr>
+                                            <td>{{ x.id }}</td>
                                             <td>{{ x.borrower.name }}</td>
+                                            <td>{{x.national_id}}</td>
+                                            <td>{{x.phone}}
+                                            <td>{{x.address}}
                                             <td>{{ x.purpose }}</td>
                                             <td>ksh.{{ x.amount }}</td>
                                             <td>{{ x.application_date }}</td>
@@ -361,5 +454,11 @@
                
             </div>
         </div>
+        <script>
+    const pieLabels = {{ pie_labels|safe }};
+    const pieData = {{ pie_data|safe }};
+</script>
+
+        
       {% include "footer.html" %}
 {% endblock content %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="p-4 p-md-5" style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/Others/background3.webp');">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8 col-xl-6">
+      <div class="card rounded-3 shadow">
+        <div class="card-body p-4">
+
+          <!-- Header -->
+          <div class="text-center mb-4">
+            <h3 class="fw-bold">Make a Payment</h3>
+            <h6 class="text-muted">Select your loan and preferred method</h6>
+          </div>
+
+          <!-- Borrower Info & Till Number -->
+          <div class="alert alert-info text-center fw-bold">
+            M-Pesa Till Number: <span class="text-dark">456234</span><br>
+            Borrower: <span class="text-dark">{{ request.user.get_full_name }}</span><br>
+            Phone: <span class="text-dark">{{ request.user.phone_number }}</span>
+          </div>
+
+          <!-- Form Start -->
+          <form method="post">
+            {% csrf_token %}
+
+            <!-- Loan Selection -->
+            <div class="mb-3">
+              <label for="loan" class="form-label">Select Loan</label>
+              <select name="loan" id="loan" class="form-select" required>
+                <option value="">-- Select your loan --</option>
+                {% for loan in user_loans %}
+                  <option value="{{ loan.id }}">
+                    Loan #{{ loan.id }} — KES {{ loan.amount }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Payment Method Selection -->
+            <div class="mb-3">
+              <label for="method" class="form-label">Payment Method</label>
+              <select name="method" id="method" class="form-select" required onchange="toggleCardFields(this.value)">
+                <option value="">-- Choose Method --</option>
+                <option value="mpesa">M-Pesa</option>
+                <option value="bank">Bank Transfer</option>
+                <option value="cash">Cash</option>
+                <option value="card">Credit/Debit Card</option>
+              </select>
+            </div>
+
+            <!-- Card Fields (Optional) -->
+            <div id="card-fields" style="display: none;">
+              <hr>
+              <p class="fw-bold mt-3 mb-2">Card Details</p>
+
+              <div class="mb-3">
+                <label for="cardholder" class="form-label">Cardholder's Name</label>
+                <input type="text" id="cardholder" name="cardholder" class="form-control" placeholder="e.g. Anna Doe" />
+              </div>
+
+              <div class="row">
+                <div class="col-md-7 mb-3">
+                  <label for="cardnumber" class="form-label">Card Number</label>
+                  <input type="text" id="cardnumber" name="cardnumber" class="form-control" placeholder="1234 5678 9012 3456" />
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label for="expiry" class="form-label">Expiry</label>
+                  <input type="text" id="expiry" name="expiry" class="form-control" placeholder="MM/YY" />
+                </div>
+                <div class="col-md-2 mb-3">
+                  <label for="cvv" class="form-label">CVV</label>
+                  <input type="text" id="cvv" name="cvv" class="form-control" placeholder="123" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-success">Proceed</button>
+              <a href="{% url 'repayment' %}" class="btn btn-secondary ms-2">Cancel</a>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function toggleCardFields(method) {
+    const cardFields = document.getElementById("card-fields");
+    cardFields.style.display = (method === "card") ? "block" : "none";
+  }
+</script>
+
+{% include "footer.html" %}
+{% endblock %}

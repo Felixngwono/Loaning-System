@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center text-primary mb-4">Add Loan Repayment</h2>
+
+            <form method="post" novalidate class="card shadow-sm p-4 border-0">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="loan" class="form-label">Loan</label>
+                    {% render_field form.loan class="form-control" id="loan" %}
+                </div>
+                <div class="mb-3">
+                    <label for="amount" class="form-label">Amount  (KES)</label>
+                    {% render_field form.amount class="form-control" id="amount" %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="amount_paid" class="form-label">Amount Paid (KES)</label>
+                    {% render_field form.amount_paid class="form-control" id="amount_paid" %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="transaction_reference" class="form-label">Transaction Reference</label>
+                    {% render_field form.transaction_reference class="form-control" id="transaction_reference" %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="method" class="form-label">Payment Method</label>
+                    {% render_field form.method class="form-select" id="method" %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    {% render_field form.status class="form-select" id="status" %}
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success">Submit Payment</button>
+                    <a href="{% url 'repayment' %}" class="btn btn-secondary ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}
+{% endblock %}

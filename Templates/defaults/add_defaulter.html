@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-danger text-white text-center">
+          <h4>Add Loan Defaulter (Admin Only)</h4>
+        </div>
+        <div class="card-body">
+          <form method="post" novalidate>
+            {% csrf_token %}
+
+            <!-- Loan Field -->
+            <div class="mb-3">
+              <label for="{{ form.loan.id_for_label }}" class="form-label">Loan</label>
+              {% render_field form.loan class="form-control" %}
+              {% if form.loan.errors %}
+                <div class="text-danger small">{{ form.loan.errors|striptags }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Reason Field -->
+            <div class="mb-3">
+              <label for="{{ form.reason.id_for_label }}" class="form-label">Reason</label>
+              {% render_field form.reason class="form-control" rows="3" %}
+              {% if form.reason.errors %}
+                <div class="text-danger small">{{ form.reason.errors|striptags }}</div>
+              {% endif %}
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-danger">
+                Add Defaulter
+              </button>
+              <a href="{% url 'defaulters' %}" class="btn btn-secondary ms-2">
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include "footer.html" %}
+{% endblock %}

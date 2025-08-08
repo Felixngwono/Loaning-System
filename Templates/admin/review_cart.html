@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Review Cart</h2>
+
+    {% if review_items %}
+        <table class="table table-bordered table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Application ID</th>
+                    <th>Applicant</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Decision</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in review_items %}
+                    <tr>
+                        <td>{{ item.application.id }}</td>
+                        <td>{{ item.application.applicant }}</td>
+                        <td>{{ item.application.amount }}</td>
+                        <td>{{ item.application.status }}</td>
+                        <td>
+                            <form method="post" class="d-flex align-items-center">
+                                {% csrf_token %}
+                                <input type="hidden" name="application_id" value="{{ item.application.id }}">
+
+                                <div class="form-check me-2">
+                                    <input class="form-check-input" type="radio" name="decision" value="approved" required>
+                                    <label class="form-check-label text-success">Approve</label>
+                                </div>
+                                <div class="form-check me-2">
+                                    <input class="form-check-input" type="radio" name="decision" value="rejected" required>
+                                    <label class="form-check-label text-danger">Reject</label>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info mt-3">Your review cart is empty.</div>
+    {% endif %}
+      <a href="{% url 'index' %}" class="btn btn-secondary mt-3">Back to Loans</a>
+
+</div>
+{% include "footer.html" %}
+{% endblock %}

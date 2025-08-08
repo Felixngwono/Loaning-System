@@ -1,36 +1,100 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-4">
-  <h2 class="mb-4">Loan Details</h2>
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Loan Details</h4>
+    </div>
 
-  <table class="table table-bordered">
-    <tr>
-      <th>Loan ID</th>
-      <td>{{ borrower_det.id }}</td>
-    </tr>
-    <tr>
-      <th>Borrower Name</th>
-      <td>{{user.name }}</td>
-    </tr>
-    <tr>
-      <th>Amount</th>
-      <td>{{ borrower_det.amount }}</td>
-    </tr>
-    <tr>
-      <th>Status</th>
-      <td>{{ borrower_det.status }}</td>
-    </tr>
-    <tr>
-      <th>Date Applied</th>
-      <td>{{ borrower_det.application_date }}</td>
-    </tr>
-    <tr>
-      <th>Purpose</th>
-      <td>{{ borrower_det.purpose }}</td>
-    </tr>
-  </table>
+    <div class="card-body">
+      <h5 class="text-muted mb-3">Loan ID: <span class="text-dark">#{{ borrower_det.id }}</span></h5>
 
-  <a href="{% url 'borrower_loans' %}" class="btn btn-secondary">Back</a>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <strong>Borrower Name:</strong> {{ user.name }}
+        </div>
+        <div class="col-md-6">
+          <strong>Email:</strong> {{ user.email }}
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <strong>National ID:</strong> {{ borrower_det.national_id }}
+        </div>
+        <div class="col-md-6">
+          <strong>Phone:</strong> {{ borrower_det.phone }}
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <strong>Address:</strong> {{ borrower_det.address }}
+        </div>
+        <div class="col-md-6">
+          <strong>Profession:</strong> {{ user.profession }}
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <strong>Amount:</strong> KES {{ borrower_det.amount|floatformat:2 }}
+        </div>
+        <div class="col-md-6">
+          <strong>Status:</strong>
+          {% if borrower_det.status == 'approved' %}
+            <span class="badge bg-success">Approved</span>
+          {% elif borrower_det.status == 'rejected' %}
+            <span class="badge bg-danger">Rejected</span>
+          {% else %}
+            <span class="badge bg-warning text-dark">Pending</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <strong>Applied On:</strong> {{ borrower_det.application_date|date:"M d, Y" }}
+        </div>
+        <div class="col-md-6">
+          <strong>Purpose:</strong> {{ borrower_det.purpose }}
+        </div>
+      </div>
+
+      {% if borrower_det.approval_date %}
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <strong>Approved On:</strong> {{ borrower_det.approval_date|date:"M d, Y" }}
+        </div>
+      </div>
+      {% endif %}
+
+      {% if borrower_det.term_months and borrower_det.interest_rate %}
+      <hr>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <strong>Loan Term:</strong> {{ borrower_det.term_months }} months
+        </div>
+        <div class="col-md-6">
+          <strong>Interest Rate:</strong> {{ borrower_det.interest_rate }}%
+        </div>
+      </div>
+      {% endif %}
+
+      {% if borrower_det.loancondition %}
+      <hr>
+      <h6 class="mt-3">Loan Conditions</h6>
+      <p>{{ borrower_det.loancondition.terms_text }}</p>
+      {% endif %}
+    </div>
+
+    <div class="card-footer text-end">
+      <a href="{% url 'borrower_loans' %}" class="btn btn-outline-primary">← Back to Loans</a>
+    </div>
+  </div>
 </div>
+
 {% include "footer.html" %}
 {% endblock %}

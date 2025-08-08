@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import ContactPage,  add_to_cart,  base, borrower_details, decide_loan, defaulted_loans, disbursement_list, edit_profile, loan_approval_list, loan_cart, loan_table_view, qualify_applicant, repayment, signup,loginpage, index, view_cart, welcoming, profile,logoutuser, chart , apply_for_loan , loan_success , borrower_loans
+from .views import ContactPage, add_defaulter_admin, add_disbersement, add_payment,  add_to_cart,  base, borrower_details, decide_loan, defaulted_loans, disbursement_list, edit_profile, loan_approval_list, loan_cart, loan_payment, qualify_applicant, repayment, review_cart_view, signup,loginpage, index, view_cart, welcoming, profile,logoutuser, chart , apply_for_loan , loan_success , borrower_loans
 
 urlpatterns = [
     path('', welcoming, name='welcoming'),
@@ -25,13 +25,22 @@ urlpatterns = [
 
 
     path('loan-cart/', loan_cart, name='loan_cart'),
-    path('cart/', view_cart, name='view_cart'),
     path('admin/cart/add/<int:application_id>/', add_to_cart, name='add_to_cart'),
-    path('admin/cart/decide/<int:application_id>/<str:decision>/', decide_loan, name='decide_loan'),
+    path('review-cart/', review_cart_view, name='view_cart'),
+    path('decide/<int:application_id>/<str:decision>/', decide_loan, name='decide_loan'),
 
     path('repayment/', repayment, name='repayment'),
+    path('add_payment/',add_payment,name='add_payment'),
+    path('loan_payment,',loan_payment,name='loan_payment'),
+
     path('defaulters/', defaulted_loans, name='defaulters'),
+    path('add_defaulter/', add_defaulter_admin, name='add_defaulter'),
+
+
     path('disbursement/', disbursement_list, name='disbursement_list'),
+    path('add_disbersement/', add_disbersement, name='add_disbersment'),
+
+    
     path('loan-approvals/', loan_approval_list, name='loan_approval_list'),
 
     path('contact/', ContactPage, name='contact'),
@@ -39,7 +48,7 @@ urlpatterns = [
     
     path('qualify/<int:pk>/<str:status>/', qualify_applicant, name='qualify_applicant'),
 
-    path('loan-tables/', loan_table_view, name='loan_tables'),
+   
 
 ]
 

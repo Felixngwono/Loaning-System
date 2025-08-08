@@ -16,9 +16,9 @@
                                         <tr>
                                             <th>Loan ID</th>
                                             <th>Borrower Name</th>
+                                            <th>National ID</th>
                                             <th>Amount</th>
                                             <th>Status</th>
-                                            <th>Date Applied</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -27,9 +27,9 @@
                                         <tr>
                                             <td>{{ loan.id }}</td>
                                             <td>{{ loan.borrower.name }}</td>
+                                            <td>{{ loan.national_id }}</td>
                                             <td>{{ loan.amount }}</td>
                                             <td>{{ loan.status }}</td>
-                                            <td>{{ loan.application_date }}</td>
                                             <td>
                                                 <a href="{% url "borrower_details" loan.pk %}" class="btn btn-primary btn-sm">View</a>
                                                 {% if loan.status == 'Pending' %}

@@ -3,9 +3,9 @@ document.addEventListener("DOMContentLoaded", function() {
                                             new Chart(ctx, {
                                                 type: 'pie',
                                                 data: {
-                                                    labels: ["Red", "Blue", "Yellow"],
+                                                    labels:  {{ pie_labels|safe }},
                                                     datasets: [{
-                                                        data: [300, 50, 100],
+                                                        data: {{ pie_data|safe }},
                                                         backgroundColor: [
                                                             "#dc3545",
                                                             "#007bff",
