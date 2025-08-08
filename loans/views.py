@@ -2,17 +2,13 @@ from datetime import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from loans.forms import  ContactForm, DefaultRecordForm, LoanApplicationForm, LoanOfficerForm, MyUserCreationForm, RepaymentForm, disbursementForm
-from .models import Borrower, DefaultRecord, Guarantor, LoanApplication, LoanCondition, LoanDocument, LoanOfficer, LoanPurposeCategory, LoanSchedule, Repayment, ReviewCart, SupportTicket, TransactionLog, User, disbursement, loanapproval
+from loans.forms import  ContactForm, DefaultRecordForm, LoanApplicationForm,  MyUserCreationForm, RepaymentForm, disbursementForm
+from .models import Borrower, DefaultRecord, LoanApplication, LoanCondition, LoanDocument, LoanPurposeCategory, LoanSchedule, Repayment, ReviewCart,  TransactionLog, User, disbursement, loanapproval
 from django.http import HttpResponse
 from .models import Loan
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from django.utils import timezone
 from django.db.models import Sum
-from django.db.models.functions import TruncMonth
-from django.db.models import Count
-from django.http import HttpResponseForbidden
  
 
 # Create your views here.
