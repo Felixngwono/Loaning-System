@@ -19,22 +19,22 @@
 
           <div class="mb-3">
             <label for="name" class="form-label">Your Name</label>
-            <input type="text" id="name" name="name" class="form-control" required>
+            {% render_field form.name class="form-control"  %} 
           </div>
 
           <div class="mb-3">
             <label for="email" class="form-label">Your Email</label>
-            <input type="email" id="email" name="email" class="form-control" required>
+            {% render_field form.email class="form-control" %}
           </div>
 
           <div class="mb-3">
             <label for="subject" class="form-label">Subject</label>
-            <input type="text" id="subject" name="subject" class="form-control" required>
+            {% render_field form.subject class="form-control"  %}
           </div>
 
           <div class="mb-4">
             <label for="message" class="form-label">Your Message</label>
-            <textarea id="message" name="message" rows="5" class="form-control" required></textarea>
+            {% render_field form.message class="form-control"  %}
           </div>
 
           <button type="submit" class="btn btn-danger">
@@ -47,9 +47,9 @@
       <div class="col-md-4">
         <div class="bg-white p-4 border rounded shadow-sm">
           <h5 class="mb-4 text-primary">Contact Information</h5>
-          <p><i class="fas fa-map-marker-alt me-2 text-danger"></i>San Francisco, CA 94126, USA</p>
-          <p><i class="fas fa-phone me-2 text-danger"></i>+01 234 567 89</p>
-          <p><i class="fas fa-envelope me-2 text-danger"></i>contact@yourdomain.com</p>
+          <p><i class="fas fa-map-marker-alt me-2 text-danger"></i>Kileleshwa, 10, Nairobi</p>
+          <p><i class="fas fa-phone me-2 text-danger"></i>+254700369300</p>
+          <p><i class="fas fa-envelope me-2 text-danger"></i>info@felloloan.com</p>
         </div>
       </div>
     </div>

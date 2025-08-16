@@ -9,7 +9,9 @@ from .models import Loan
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Sum
- 
+from datetime import timedelta
+from django.utils import timezone
+
 
 # Create your views here.
 def signup(request):
@@ -193,9 +195,13 @@ def chart(request):
    
     return render(request, 'charts.html', )
 
-
 @login_required(login_url='login')
 def apply_for_loan(request):
+    if not hasattr(request.user, 'is_enduser') or not request.user.is_enduser:
+        # Redirect or show permission denied page
+        messages.error(request, "You do not have permission to apply for a loan.")
+        return redirect('index')  # Or render a "403.html" page
+    
     show_modal = False
     if request.method == 'POST':
         form = LoanApplicationForm(request.POST)
@@ -203,11 +209,13 @@ def apply_for_loan(request):
             loan = form.save(commit=False)
             loan.borrower = request.user
             loan.save()
-            messages.success(request,'Loan Application successful')
-            show_modal=True 
+            messages.success(request, 'Loan Application successful')
+            show_modal = True
     else:
         form = LoanApplicationForm()
-    return render(request, 'loans/apply.html', {'form': form,'show_modal':show_modal})
+
+    return render(request, 'loans/apply.html', {'form': form, 'show_modal': show_modal})
+
 
 def loan_success(request):
     return render(request, 'loans/success.html')
@@ -418,9 +426,9 @@ def ContactPage(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            # Normally you'd handle form logic here (save or send email)
+            form.save()
             messages.success(request, 'Your message has been sent successfully!')
-            return redirect('contact')  # Use your URL name
+            return redirect('contact')  
     return render(request, 'contact.html', {'form': form})
 
 @login_required(login_url='login')
@@ -467,5 +475,6 @@ def loan_approval_list(request):
     approvals = loanapproval.objects.select_related('loan', 'approved_by').order_by('-approval_date')
     return render(request, 'loanapproval/list.html', {'approvals': approvals})
 
-
+def setting(request):
+    return render(request,'settings.html')
 

@@ -1,5 +1,5 @@
 from django import forms
-from .models import  DefaultRecord, Loan, LoanOfficer, Repayment, ReviewCart, User, disbursement
+from .models import  Contact, DefaultRecord, Loan, LoanOfficer, Repayment, ReviewCart, User, disbursement
 from django.contrib.auth.forms import UserCreationForm
 
 class MyUserCreationForm(UserCreationForm):   
@@ -25,17 +25,11 @@ class RepaymentForm(forms.ModelForm):
         model = Repayment
         fields = ['loan', 'amount', 'amount_paid', 'transaction_reference', 'method', 'status']
 
-class ContactForm(forms.Form):
-    name = forms.CharField(max_length=100, required=True)
-    email = forms.EmailField(required=True)
-    subject = forms.CharField(max_length=200, required=True)
-    message = forms.CharField(widget=forms.Textarea, required=True)
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if not User.objects.filter(email=email).exists():
-            raise forms.ValidationError("This email is not registered.")
-        return email
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model=Contact
+        fields='__all__'
+        
     
 class ReviewCartForm(forms.ModelForm):
     

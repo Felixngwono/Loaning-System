@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import ContactPage, add_defaulter_admin, add_disbersement, add_payment,  add_to_cart,  base, borrower_details, decide_loan, defaulted_loans, disbursement_list, edit_profile, loan_approval_list, loan_cart, loan_payment, qualify_applicant, repayment, review_cart_view, signup,loginpage, index,  welcoming, profile,logoutuser, chart , apply_for_loan , loan_success , borrower_loans
+from .views import ContactPage, add_defaulter_admin, add_disbersement, add_payment,  add_to_cart,  base, borrower_details, decide_loan, defaulted_loans, disbursement_list, edit_profile, loan_approval_list, loan_cart, loan_payment, qualify_applicant, repayment, review_cart_view, setting, signup,loginpage, index,  welcoming, profile,logoutuser, chart , apply_for_loan , loan_success , borrower_loans
 
 urlpatterns = [
     path('', welcoming, name='welcoming'),
@@ -47,6 +47,8 @@ urlpatterns = [
 
     
     path('qualify/<int:pk>/<str:status>/', qualify_applicant, name='qualify_applicant'),
+
+    path('settings/', setting, name='settings'),
 
    
 

@@ -258,3 +258,18 @@ class loanapproval(models.Model):
 
     def __str__(self):
         return f"Loan #{self.loan.id} approved by {self.approved_by.username} on {self.approval_date}"
+
+
+class Contact(models.Model):
+    name=models.CharField(max_length=100,null=True)
+    email=models.EmailField()
+    subject=models.CharField(max_length=100,null=True)
+    message=models.TextField()
+    created_at=models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.name
+    
