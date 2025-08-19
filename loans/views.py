@@ -89,6 +89,7 @@ def index(request):
     defaulted_loans = DefaultRecord.objects.filter(loan__borrower=request.user).count()
     defaulters_since_lastmonth = DefaultRecord.objects.filter(marked_date__gte=timezone.now().date() - timezone.timedelta(days=30), loan__borrower=request.user).count()
     
+    # table form view
     if request.user.is_superuser:
         borrowerss = Loan.objects.all()
     else:
@@ -197,11 +198,7 @@ def chart(request):
 
 @login_required(login_url='login')
 def apply_for_loan(request):
-    if not hasattr(request.user, 'is_enduser') or not request.user.is_enduser:
-        # Redirect or show permission denied page
-        messages.error(request, "You do not have permission to apply for a loan.")
-        return redirect('index')  # Or render a "403.html" page
-    
+
     show_modal = False
     if request.method == 'POST':
         form = LoanApplicationForm(request.POST)
@@ -365,7 +362,7 @@ def loan_conditions(request, loan_id):
 @login_required(login_url='login')
 def loan_cart(request):
     if request.user.is_superuser:
-        cart_items = Loan.objects.all()  # Superusers see all loan items
+        cart_items = Loan.objects.all() 
     else:
         cart_items = Loan.objects.filter(status='pending', borrower=request.user)  # Normal users see only their pending items
 
@@ -382,7 +379,16 @@ def qualify_applicant(request, pk, status):
             app.status = status
             app.save()
 
-    return redirect('loan_cart')
+    # Now get all qualified applications
+    if request.user.is_superuser:
+        applications = LoanApplication.objects.filter(status='approved')
+    else:
+        applications = LoanApplication.objects.filter(
+            status='approved', borrower__user=request.user
+        )
+
+    return render(request, 'admin/qualified_applicants.html', {'applications': applications,'count': applications.count()})
+
 
 @staff_member_required (login_url='login')
 def add_to_cart(request, application_id):
@@ -394,10 +400,14 @@ def add_to_cart(request, application_id):
 @staff_member_required(login_url='login')
 def review_cart_view(request):
     if request.user.is_superuser:
-        review_items = Borrower.objects.select_related('user', 'creditscore').all()
+        # Superuser sees all borrowers
+        review_items = Borrower.objects.select_related('user').all()
     else:
-        # Staff users see only their own
-        review_items = Borrower.objects.select_related('application').filter(officer=request.user)
+        # Staff users see borrowers who have pending LoanApplications
+        pending_apps = LoanApplication.objects.filter(status='pending')
+        borrower_ids = pending_apps.values_list('borrower_id', flat=True).distinct()
+        
+        review_items = Borrower.objects.filter(id__in=borrower_ids).select_related('user')
 
     return render(request, 'admin/review_cart.html', {'review_items': review_items, 'review_count': review_items.count()})
 
@@ -440,6 +450,7 @@ def disbursement_list(request):
         disbursements = disbursement.objects.filter(loan__in=loans).select_related('loan')
     
     return render(request, 'disbursement/list.html', {'disbursements': disbursements})
+
 def add_disbersement(request):
     form = disbursementForm()
     show_modal = False
@@ -477,4 +488,3 @@ def loan_approval_list(request):
 
 def setting(request):
     return render(request,'settings.html')
-
