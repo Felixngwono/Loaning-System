@@ -198,20 +198,23 @@ def chart(request):
 
 @login_required(login_url='login')
 def apply_for_loan(request):
+        show_modal = False
+        if request.method == 'POST':
+            form = LoanApplicationForm(request.POST)
+            if form.is_valid():
+                loan = form.save(commit=False)
+                loan.borrower = request.user
+                loan.save()
+                messages.success(request, 'Loan Application successful')
+                show_modal = True
+        else:
+            form = LoanApplicationForm()
+            # Limit borrower field to only the logged-in user if the field is visible
+            if 'borrower' in form.fields:
+                form.fields['borrower'].queryset = User.objects.filter(id=request.user.id)
+                form.fields['borrower'].initial = request.user.id
 
-    show_modal = False
-    if request.method == 'POST':
-        form = LoanApplicationForm(request.POST)
-        if form.is_valid():
-            loan = form.save(commit=False)
-            loan.borrower = request.user
-            loan.save()
-            messages.success(request, 'Loan Application successful')
-            show_modal = True
-    else:
-        form = LoanApplicationForm()
-
-    return render(request, 'loans/apply.html', {'form': form, 'show_modal': show_modal})
+        return render(request, 'loans/apply.html', {'form': form, 'show_modal': show_modal})
 
 
 def loan_success(request):
@@ -251,34 +254,40 @@ def base(request):
 @login_required(login_url='login')
 def repayment(request):
     if request.user.is_superuser:
-        repayments = Repayment.objects.select_related('loan', 'loan__borrower')
+        repayments = Repayment.objects.all().select_related('loan', 'loan__borrower')
     else:
         # Regular user sees only their repayments
         repayments = Repayment.objects.filter(loan__borrower=request.user).select_related('loan')
 
     return render(request, 'repayment/list.html', {'repayments': repayments})
-    
+
 @login_required(login_url='login')
 def add_payment(request):
-    # Check if user has any loan
-    user_loans = Loan.objects.filter(borrower=request.user)
+        show_modal = False
+        user_loans = Loan.objects.filter(borrower=request.user)
 
-    if not user_loans.exists():
-        messages.error(request, "You have not borrowed any loan, so you cannot make a repayment.")
-        return redirect('repayment')
+        if not user_loans.exists(): 
+            messages.error(request, "You have not borrowed any loan, so you cannot make a repayment.")
+            show_modal = True
 
-    if request.method == 'POST':
-        form = RepaymentForm(request.POST)
-        if form.is_valid():
-            repayment = form.save(commit=False)
-            repayment.save()
-            messages.success(request, "Payment added successfully.")
-            return redirect('repayment')
-    else:
-        form = RepaymentForm()
+        if request.method == 'POST':
+            form = RepaymentForm(request.POST)
+            if form.is_valid():
+                repayment = form.save(commit=False)
+                if repayment.loan.borrower == request.user:
+                    repayment.save()
+                    messages.success(request, "Payment added successfully.")
+                    show_modal = True
+                else:
+                    messages.error(request, "You can only repay your own loans.")
+                    show_modal = True
+        else:
+            # Limit loan choices to user's loans
+            form = RepaymentForm()
+            form.fields['loan'].queryset = user_loans
 
-    context = {'form': form}
-    return render(request, 'repayment/payment.html', context)
+        context = {'form': form, 'show_modal': show_modal}
+        return render(request, 'repayment/payment.html', context)
 
 @login_required(login_url='login')
 def loan_payment(request):
@@ -314,16 +323,19 @@ def defaulted_loans(request):
     return render(request, 'defaults/list.html', {'defaults': defaults})
 
 def add_defaulter_admin(request):
+    show_modal = False
     if request.method == 'POST':
         form = DefaultRecordForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('defaulters')  
+            messages.success(request, "Defaulter added successfully.")
+            show_modal = True  
     else:
         form = DefaultRecordForm()
+        
 
-    return render(request, 'defaults/add_defaulter.html', {'form': form})
- 
+    return render(request, 'defaults/add_defaulter.html', {'form': form, 'show_modal': show_modal})
+
 
 @login_required(login_url='login')
 def loan_schedule(request, loan_id):

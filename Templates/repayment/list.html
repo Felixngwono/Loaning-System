@@ -2,30 +2,7 @@
 {% load static %}
 {% block content %}
 
-<!-- Modal -->
-<div class="modal fade" id="addpayment" tabindex="-1" aria-labelledby="addpaymentLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addpaymentLabel">Repayment Status</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        {% if messages %}
-          {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-          {% endfor %}
-        {% endif %}
-      </div>
-      <div class="modal-footer">
-        {% if user.is_authenticated %}
-          <a href="{% url 'repayment' %}" class="btn btn-primary">Next Page</a>
-        {% endif %}
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <!-- Repayments Table -->
 <div class="container mt-5">
@@ -68,20 +45,11 @@
 
   <div class="mt-4 text-center">
     <a href="{% url 'index' %}" class="btn btn-outline-secondary">Back to Dashboard</a>
-    <a href="{% url 'add_payment' %}" class="btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#addpayment">
+    <a href="{% url 'add_payment' %}" class="btn btn-primary ms-2">
       Add Payment
     </a>
   </div>
 </div>
-
-{% if show_modal %}
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    var myModal = new bootstrap.Modal(document.getElementById('addpayment'));
-    myModal.show();
-  });
-</script>
-{% endif %}
 
 {% include "footer.html" %}
 {% endblock %}
