@@ -2,7 +2,7 @@ from datetime import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from loans.forms import  ContactForm, DefaultRecordForm, LoanApplicationForm,  MyUserCreationForm, RepaymentForm, disbursementForm
+from loans.forms import  ContactForm, DefaultRecordForm, FeedbackForm, LoanApplicationForm,  MyUserCreationForm, RepaymentForm, disbursementForm
 from .models import Borrower, DefaultRecord, LoanApplication, LoanCondition, LoanDocument, LoanPurposeCategory, LoanSchedule, Repayment, ReviewCart,  TransactionLog, User, disbursement, loanapproval
 from django.http import HttpResponse
 from .models import Loan
@@ -500,3 +500,22 @@ def loan_approval_list(request):
 
 def setting(request):
     return render(request,'settings.html')
+
+
+@login_required(login_url='login')
+def FeedbackPage(request):
+    form = FeedbackForm()
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            # Set borrower to the logged-in user or their borrower profile if exists
+            try:
+                borrower = Borrower.objects.get(user=request.user)
+                feedback.borrower = borrower
+            except Borrower.DoesNotExist:
+                feedback.borrower = None  # Or handle as needed
+            feedback.save()
+            messages.success(request, 'Your feedback has been submitted successfully!')
+            return redirect('feedback')
+    return render(request, 'feedback.html', {'form': form})

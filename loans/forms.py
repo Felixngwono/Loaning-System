@@ -1,5 +1,5 @@
 from django import forms
-from .models import  Contact, DefaultRecord, Loan, LoanOfficer, Repayment, ReviewCart, User, disbursement
+from .models import  Contact, DefaultRecord, Feedback, Loan, LoanOfficer, Repayment, ReviewCart, User, disbursement
 from django.contrib.auth.forms import UserCreationForm
 
 class MyUserCreationForm(UserCreationForm):   
@@ -57,4 +57,9 @@ class disbursementForm(forms.ModelForm):
     
     class Meta:
         model = disbursement
+        fields = '__all__'
+
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
         fields = '__all__'

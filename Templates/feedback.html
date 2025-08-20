@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container py-5">
+     <div>
+            {% if form.errors %}
+                <div class="mb-3 p-2 rounded bg-danger-subtle border border-danger text-danger">
+                    <ul class="mb-0 ps-3">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    <h2 class="mb-4">Feedback Form</h2>
+    <form class="needs-validation" novalidate method="post" action="">
+        {% csrf_token %}
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="id_first_name" class="form-label">First Name</label>
+                {% render_field form.first_name class="form-control" id="id_first_name" %}
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="id_last_name" class="form-label">Last Name</label>
+                {% render_field form.last_name class="form-control" id="id_last_name" %}
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">User</label>
+            <input type="text" class="form-control" id="id_user" value="{{ request.user.username }}" readonly>
+            <input type="hidden" name="user" value="{{ request.user.id }}">
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="id_city" class="form-label">City</label>
+                {% render_field form.city class="form-control" id="id_city" %}
+                <div class="invalid-feedback">
+                    Please provide a valid city.
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label for="id_zip_code" class="form-label">Zip</label>
+                {% render_field form.zip_code class="form-control" id="id_zip_code" %}
+                <div class="invalid-feedback">
+                    Please provide a valid zip.
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="id_message" class="form-label">Message</label>
+            {% render_field form.message class="form-control" id="id_message" rows="4" %}
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+</div>
+{% include "footer.html" %}
+{% endblock content %}
