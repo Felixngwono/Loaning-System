@@ -25,18 +25,18 @@
           {% for item in cart_items %}
           <tr>
             <td>{{ forloop.counter }}</td>
-            <td>{{ item.application.borrower.user.get_full_name }}</td>
-            <td>KES {{ item.application.amount_requested }}</td>
-            <td>{{ item.application.purpose }}</td>
+            <td>{{ item.borrower.user.name }}</td>
+            <td>KES {{ item.amount_requested }}</td>
+            <td>{{ item.purpose }}</td>
             <td class="text-center">
-              <select name="decision_{{ item.application.id }}" class="form-select form-select-sm">
+              <select name="decision_{{ item.id }}" class="form-select form-select-sm">
                 <option value="">-- Select --</option>
                 <option value="APPROVED">Approve</option>
                 <option value="REJECTED">Reject</option>
               </select>
             </td>
             <td>
-              <textarea name="notes_{{ item.application.id }}" class="form-control form-control-sm" rows="1" placeholder="Optional notes..."></textarea>
+              <textarea name="notes_{{ item.id }}" class="form-control form-control-sm" rows="1" placeholder="Optional notes..."></textarea>
             </td>
           </tr>
           {% endfor %}

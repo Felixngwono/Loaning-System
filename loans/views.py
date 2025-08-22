@@ -11,6 +11,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Sum
 from datetime import timedelta
 from django.utils import timezone
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+import io
+
+
+
 
 
 # Create your views here.
@@ -155,8 +162,16 @@ def welcoming(request):
     return render(request, 'welcoming.html')
 
 @login_required(login_url='login')
-def profile(request,pk):
-    userprofile=get_object_or_404(User, id=pk)
+def profile(request, pk):
+    # Django's session expiry can be set in settings.py with SESSION_COOKIE_AGE
+    # Here, we check if the session has expired and log out if so
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    # Optionally, force logout if session is expired (handled by Django if SESSION_EXPIRE_AT_BROWSER_CLOSE or SESSION_COOKIE_AGE is set)
+    # You can also manually check last activity if you store it in session
+
+    userprofile = get_object_or_404(User, id=pk)
     if request.method == 'POST':
         form = MyUserCreationForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
@@ -173,6 +188,7 @@ def profile(request,pk):
     }
     return render(request, 'profile.html', context)
     
+@login_required(login_url='login')
 def edit_profile(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -413,7 +429,7 @@ def add_to_cart(request, application_id):
 def review_cart_view(request):
     if request.user.is_superuser:
         # Superuser sees all borrowers
-        review_items = Borrower.objects.select_related('user').all()
+        review_items = Borrower.objects.all()
     else:
         # Staff users see borrowers who have pending LoanApplications
         pending_apps = LoanApplication.objects.filter(status='pending')
@@ -423,7 +439,7 @@ def review_cart_view(request):
 
     return render(request, 'admin/review_cart.html', {'review_items': review_items, 'review_count': review_items.count()})
 
-@staff_member_required (login_url='login')
+@staff_member_required (login_url='login') 
 def view_cart(request):
     cart_items = ReviewCart.objects.filter(officer=request.user)
     return render(request, 'admin_cart/cart.html', {'cart_items': cart_items})
@@ -519,3 +535,35 @@ def FeedbackPage(request):
             messages.success(request, 'Your feedback has been submitted successfully!')
             return redirect('feedback')
     return render(request, 'feedback.html', {'form': form})
+
+def PdfReports(request):
+        buffer = io.BytesIO()
+        pdf = SimpleDocTemplate(buffer, pagesize=letter)
+        elements = []
+        data = [['Loan ID', 'National ID', 'Borrower', 'Amount', 'Status', 'Application Date', 'Disbursement Date', 'Purpose']]
+        loans = Loan.objects.select_related('borrower').all()
+        for loan in loans:
+            data.append([
+                loan.id,
+                getattr(loan.borrower, 'national_id', ''),
+                str(loan.borrower),
+                loan.amount,
+                loan.status,
+                loan.application_date.strftime('%Y-%m-%d') if loan.application_date else '',
+                getattr(loan, 'disbursement_date', ''),
+                getattr(loan, 'purpose', '')
+            ])
+        table = Table(data)
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ]))
+        elements.append(table)
+        pdf.build(elements)
+        buffer.seek(0)
+        return HttpResponse(buffer, content_type='application/pdf')

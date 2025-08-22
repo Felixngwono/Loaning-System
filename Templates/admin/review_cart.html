@@ -18,14 +18,13 @@
             <tbody>
                 {% for item in review_items %}
                     <tr>
-                        <td>{{ item.application.id }}</td>
-                        <td>{{ item.application.applicant }}</td>
-                        <td>{{ item.application.amount }}</td>
-                        <td>{{ item.application.status }}</td>
+                        <td>{{ item.borrower }}</td>
+                        <td>{{ item.defaultrecord }}</td>
+                        <td>{{ item.loancondition }}</td>
                         <td>
                             <form method="post" class="d-flex align-items-center">
                                 {% csrf_token %}
-                                <input type="hidden" name="application_id" value="{{ item.application.id }}">
+                                <input type="hidden" name="application_id" value="{{ item.id }}">
 
                                 <div class="form-check me-2">
                                     <input class="form-check-input" type="radio" name="decision" value="approved" required>
